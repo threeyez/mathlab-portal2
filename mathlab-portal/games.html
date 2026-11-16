@@ -3,100 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathLab — Interactive Modules</title>
+    <title>MathLab Portal</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* extra styles for the local game */
-        #pong-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
+        /* Modern UI overrides */
+        :root {
+            --bg: #0f111a;
+            --surface: #1a1d27;
+            --border: #2a2d3a;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --danger: #ef4444;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 { color: var(--text); }
+        
+        .back-link { color: var(--accent); }
+        .back-link:hover { text-decoration: underline; }
+
+        .game-grid {
+            max-width: 1200px;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        }
+
+        .game-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .game-card h3 {
+            padding: 16px 16px 0 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .game-thumb {
+            background: #0a0c12;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .game-frame { background: #000; }
+
+        .launch-btn {
+            background: var(--accent);
+            border-radius: 8px;
+            margin: 16px;
+            transition: background 0.2s;
+        }
+
+        .launch-btn:hover { background: var(--accent-hover); }
+
+        /* Live Event Banner */
+        #live-event-banner {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: var(--danger);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        /* Admin Panel Modal */
+        #admin-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
             align-items: center;
             justify-content: center;
         }
-        #pong-canvas {
-            max-width: 100%;
-            max-height: 100%;
-            display: block;
+
+        .admin-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
-        .iframe-wrapper { position: relative; width: 100%; height: 100%; }
-        .iframe-overlay {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(0,0,0,0.7);
+
+        .admin-content h2 { margin-bottom: 16px; font-size: 1.2rem; }
+        
+        .admin-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .admin-content input:focus { border-color: var(--accent); }
+
+        .admin-content button {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent);
             color: white;
-            text-align: center;
-            padding: 4px;
-            font-size: 0.7rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
         }
-        .iframe-overlay a { color: #4da6ff; }
+
+        .admin-content button:hover { background: var(--accent-hover); }
+
+        /* Secret Admin Button (bottom right corner) */
+        #admin-trigger {
+            position: fixed;
+            bottom: 10px; right: 10px;
+            width: 20px; height: 20px;
+            opacity: 0;
+            cursor: default;
+        }
     </style>
 </head>
 <body>
+    <!-- Live Event Banner -->
+    <div id="live-event-banner"></div>
+
+    <!-- Secret Admin Trigger -->
+    <div id="admin-trigger" title="Admin Access"></div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-modal">
+        <div class="admin-content">
+            <h2>Admin Login</h2>
+            <input type="password" id="admin-pass" placeholder="Enter password">
+            <button onclick="checkPassword()">Login</button>
+            <button onclick="closeAdmin()" style="background:transparent; color:var(--text-muted); margin-top:8px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Admin Control Panel (Hidden by default) -->
+    <div id="admin-controls" style="display:none; position:fixed; bottom:20px; left:20px; background:var(--surface); padding:16px; border:1px solid var(--accent); border-radius:12px; z-index:2000; box-shadow:0 0 20px rgba(59,130,246,0.2);">
+        <h3 style="margin-bottom:8px; font-size:0.9rem; color:var(--accent);">Live Broadcast System</h3>
+        <input type="text" id="event-input" placeholder="Type event message..." style="width:100%; padding:8px; background:var(--bg); border:1px solid var(--border); color:white; border-radius:4px; margin-bottom:8px;">
+        <div style="display:flex; gap:8px;">
+            <button onclick="sendEvent()" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer;">Send</button>
+            <button onclick="clearEvent()" style="flex:1; padding:8px; background:var(--danger); color:white; border:none; border-radius:4px; cursor:pointer;">Clear</button>
+        </div>
+    </div>
+
     <header class="compact">
         <h1>Interactive Learning Modules</h1>
         <a href="index.html" class="back-link">← Back to Portal</a>
     </header>
 
     <main class="game-grid">
-        <!-- Paper.io 2 — iframe -->
+        <!-- Paper.io 2 -->
         <div class="game-card">
             <div class="game-frame">
-                <div class="iframe-wrapper">
+                <div class="iframe-wrapper" style="position: relative; width: 100%; height: 100%;">
                     <iframe src="https://nite.games/embed/paper-io-2" 
                             allow="fullscreen; autoplay; gamepad; pointer-lock" 
-                            loading="lazy"></iframe>
-                    <div class="iframe-overlay">
-                        Blocked? <a href="https://nite.games/embed/paper-io-2" target="_blank">Open directly</a>
-                    </div>
+                            loading="lazy" style="width:100%; height:100%; border:none;"></iframe>
                 </div>
             </div>
-            <h3>Homework 1</h3>
-            <p>Territory Logic</p>
+            <h3>Paper.io 2</h3>
         </div>
 
         <!-- Local Pong Game -->
         <div class="game-card">
-            <div class="game-frame">
-                <div id="pong-container">
-                    <canvas id="pong-canvas" width="800" height="450"></canvas>
+            <div class="game-frame" style="position: relative; padding-bottom: 56.25%; height: 0;">
+                <div id="pong-container" style="position: absolute; top:0; left:0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center;">
+                    <canvas id="pong-canvas" width="800" height="450" style="max-width: 100%; max-height: 100%; display: block;"></canvas>
                 </div>
             </div>
-            <h3>Homework 2</h3>
-            <p>Physics Simulation</p>
+            <h3>Pong</h3>
         </div>
 
-        <!-- FIFA 14 — external link -->
+        <!-- FIFA 14 -->
         <div class="game-card">
-            <div class="game-thumb fifa-thumb" style="background: #1a252f;">
-                <span style="color: white;">FIFA 14</span>
+            <div class="game-thumb fifa-thumb">
+                <span>FIFA 14</span>
             </div>
-            <h3>Homework 3</h3>
-            <p>Sports Analytics Lab</p>
-            <a href="https://ported2browser.org/games/fifa-14/" target="_blank" class="launch-btn">Launch Module</a>
+            <h3>FIFA 14</h3>
+            <a href="https://ported2browser.org/games/fifa-14/" target="_blank" class="launch-btn">Launch Game</a>
         </div>
 
         <!-- FIFA 10-13 -->
         <div class="game-card">
-            <div class="game-thumb fifa-thumb" style="background: #1a252f;">
-                <span style="color: white;">FIFA 10–13</span>
+            <div class="game-thumb fifa-thumb">
+                <span>FIFA 10–13</span>
             </div>
-            <h3>Homework 4</h3>
-            <p>Historical Data Analysis</p>
+            <h3>FIFA Legacy</h3>
             <a href="https://www.inxanitylabs.com/games/page/3" target="_blank" class="launch-btn">Launch Archive</a>
         </div>
     </main>
 
     <script>
         // ==========================================
-        // LOCAL PONG GAME (Homework 2)
+        // LIVE EVENT SYSTEM
+        // ==========================================
+        const banner = document.getElementById('live-event-banner');
+
+        // Check for active event on load
+        function checkActiveEvent() {
+            const activeEvent = localStorage.getItem('liveEvent');
+            if (activeEvent) {
+                banner.textContent = activeEvent;
+                banner.style.display = 'block';
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+        checkActiveEvent();
+
+        // Listen for changes from other tabs
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'liveEvent') {
+                checkActiveEvent();
+            }
+        });
+
+        // ==========================================
+        // ADMIN PANEL LOGIC
+        // ==========================================
+        const trigger = document.getElementById('admin-trigger');
+        const modal = document.getElementById('admin-modal');
+        const passInput = document.getElementById('admin-pass');
+        const controls = document.getElementById('admin-controls');
+
+        // Secret trigger (click invisible square in bottom right)
+        trigger.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            passInput.focus();
+        });
+
+        function checkPassword() {
+            if (passInput.value === 'jak67') {
+                modal.style.display = 'none';
+                controls.style.display = 'block';
+                passInput.value = ''; // clear
+            } else {
+                alert('Incorrect password');
+                passInput.value = '';
+            }
+        }
+
+        function closeAdmin() {
+            modal.style.display = 'none';
+            passInput.value = '';
+        }
+
+        function sendEvent() {
+            const msg = document.getElementById('event-input').value;
+            if (msg.trim() !== '') {
+                localStorage.setItem('liveEvent', msg);
+                banner.textContent = msg;
+                banner.style.display = 'block';
+                document.getElementById('event-input').value = '';
+            }
+        }
+
+        function clearEvent() {
+            localStorage.removeItem('liveEvent');
+            banner.style.display = 'none';
+            document.getElementById('event-input').value = '';
+        }
+
+        // Enter key support for password
+        passInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // ==========================================
+        // LOCAL PONG GAME
         // ==========================================
         const canvas = document.getElementById('pong-canvas');
         const ctx = canvas.getContext('2d');
 
-        // Game variables
         const paddleWidth = 10, paddleHeight = 80;
         const ballRadius = 8;
         let playerY = (canvas.height - paddleHeight) / 2;
@@ -108,19 +319,15 @@
         let playerScore = 0;
         let aiScore = 0;
 
-        // Mouse movement for player paddle
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
             const scaleY = canvas.height / rect.height;
             const mouseY = (e.clientY - rect.top) * scaleY;
             playerY = mouseY - paddleHeight / 2;
-            
-            // Keep paddle in bounds
             if (playerY < 0) playerY = 0;
             if (playerY > canvas.height - paddleHeight) playerY = canvas.height - paddleHeight;
         });
 
-        // Touch support for mobile
         canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
@@ -135,34 +342,27 @@
             ballX = canvas.width / 2;
             ballY = canvas.height / 2;
             ballSpeedX = -ballSpeedX;
-            ballSpeedY = (Math.random() * 4) - 2; // random y direction
+            ballSpeedY = (Math.random() * 4) - 2;
         }
 
         function update() {
-            // Move ball
             ballX += ballSpeedX;
             ballY += ballSpeedY;
 
-            // Top/bottom bounce
             if (ballY - ballRadius < 0 || ballY + ballRadius > canvas.height) {
                 ballSpeedY = -ballSpeedY;
             }
 
-            // AI movement (simple tracking)
             let aiCenter = aiY + paddleHeight / 2;
             if (aiCenter < ballY - 10) aiY += 4;
             else if (aiCenter > ballY + 10) aiY -= 4;
 
-            // Keep AI in bounds
             if (aiY < 0) aiY = 0;
             if (aiY > canvas.height - paddleHeight) aiY = canvas.height - paddleHeight;
 
-            // Paddle collisions
-            // Left paddle (Player)
             if (ballX - ballRadius < paddleWidth) {
                 if (ballY > playerY && ballY < playerY + paddleHeight) {
                     ballSpeedX = -ballSpeedX;
-                    // Add some english based on where it hits
                     let deltaY = ballY - (playerY + paddleHeight / 2);
                     ballSpeedY = deltaY * 0.3;
                 } else if (ballX - ballRadius < 0) {
@@ -171,7 +371,6 @@
                 }
             }
 
-            // Right paddle (AI)
             if (ballX + ballRadius > canvas.width - paddleWidth) {
                 if (ballY > aiY && ballY < aiY + paddleHeight) {
                     ballSpeedX = -ballSpeedX;
@@ -185,30 +384,25 @@
         }
 
         function draw() {
-            // Clear screen
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw net
             ctx.strokeStyle = '#fff';
             ctx.setLineDash([10, 10]);
             ctx.beginPath();
             ctx.moveTo(canvas.width / 2, 0);
             ctx.lineTo(canvas.width / 2, canvas.height);
             ctx.stroke();
-            ctx.setLineDash([]); // reset
+            ctx.setLineDash([]);
 
-            // Draw paddles
             ctx.fillStyle = '#fff';
-            ctx.fillRect(0, playerY, paddleWidth, paddleHeight); // player
-            ctx.fillRect(canvas.width - paddleWidth, aiY, paddleWidth, paddleHeight); // AI
+            ctx.fillRect(0, playerY, paddleWidth, paddleHeight);
+            ctx.fillRect(canvas.width - paddleWidth, aiY, paddleWidth, paddleHeight);
 
-            // Draw ball
             ctx.beginPath();
             ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
             ctx.fill();
 
-            // Draw scores
             ctx.font = '32px monospace';
             ctx.fillText(playerScore, canvas.width / 4, 50);
             ctx.fillText(aiScore, (canvas.width / 4) * 3, 50);
@@ -220,7 +414,6 @@
             requestAnimationFrame(gameLoop);
         }
 
-        // Start the game
         gameLoop();
     </script>
 </body>
