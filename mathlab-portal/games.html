@@ -5,6 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MathLab — Interactive Modules</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* extra styles for the local game */
+        #pong-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #pong-canvas {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+        .iframe-wrapper { position: relative; width: 100%; height: 100%; }
+        .iframe-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            text-align: center;
+            padding: 4px;
+            font-size: 0.7rem;
+        }
+        .iframe-overlay a { color: #4da6ff; }
+    </style>
 </head>
 <body>
     <header class="compact">
@@ -13,36 +41,187 @@
     </header>
 
     <main class="game-grid">
-        <!-- Paper.io 2 — embeddable -->
+        <!-- Paper.io 2 — iframe -->
         <div class="game-card">
             <div class="game-frame">
-                <iframe src="https://nite.games/embed/paper-io-2" 
-                        allow="fullscreen; autoplay; gamepad; pointer-lock" 
-                        loading="lazy"></iframe>
+                <div class="iframe-wrapper">
+                    <iframe src="https://nite.games/embed/paper-io-2" 
+                            allow="fullscreen; autoplay; gamepad; pointer-lock" 
+                            loading="lazy"></iframe>
+                    <div class="iframe-overlay">
+                        Blocked? <a href="https://nite.games/embed/paper-io-2" target="_blank">Open directly</a>
+                    </div>
+                </div>
             </div>
-            <h3>Territory Logic</h3>
-            <p>Strategic spatial reasoning exercise.</p>
+            <h3>Homework 1</h3>
+            <p>Territory Logic</p>
         </div>
 
-        <!-- FIFA 14 — external link (not iframe-friendly) -->
+        <!-- Local Pong Game -->
         <div class="game-card">
-            <div class="game-thumb fifa-thumb">
-                <span>FIFA 14</span>
+            <div class="game-frame">
+                <div id="pong-container">
+                    <canvas id="pong-canvas" width="800" height="450"></canvas>
+                </div>
             </div>
-            <h3>Sports Analytics Lab</h3>
-            <p>Physics simulation and probability module.</p>
+            <h3>Homework 2</h3>
+            <p>Physics Simulation</p>
+        </div>
+
+        <!-- FIFA 14 — external link -->
+        <div class="game-card">
+            <div class="game-thumb fifa-thumb" style="background: #1a252f;">
+                <span style="color: white;">FIFA 14</span>
+            </div>
+            <h3>Homework 3</h3>
+            <p>Sports Analytics Lab</p>
             <a href="https://ported2browser.org/games/fifa-14/" target="_blank" class="launch-btn">Launch Module</a>
         </div>
 
-        <!-- FIFA 10-13 — via recompiled.games / inxanity -->
+        <!-- FIFA 10-13 -->
         <div class="game-card">
-            <div class="game-thumb fifa-thumb">
-                <span>FIFA 10–13</span>
+            <div class="game-thumb fifa-thumb" style="background: #1a252f;">
+                <span style="color: white;">FIFA 10–13</span>
             </div>
-            <h3>Historical Data Analysis</h3>
-            <p>Legacy statistical models and outcomes.</p>
+            <h3>Homework 4</h3>
+            <p>Historical Data Analysis</p>
             <a href="https://www.inxanitylabs.com/games/page/3" target="_blank" class="launch-btn">Launch Archive</a>
         </div>
     </main>
+
+    <script>
+        // ==========================================
+        // LOCAL PONG GAME (Homework 2)
+        // ==========================================
+        const canvas = document.getElementById('pong-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Game variables
+        const paddleWidth = 10, paddleHeight = 80;
+        const ballRadius = 8;
+        let playerY = (canvas.height - paddleHeight) / 2;
+        let aiY = (canvas.height - paddleHeight) / 2;
+        let ballX = canvas.width / 2;
+        let ballY = canvas.height / 2;
+        let ballSpeedX = 5;
+        let ballSpeedY = 5;
+        let playerScore = 0;
+        let aiScore = 0;
+
+        // Mouse movement for player paddle
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleY = canvas.height / rect.height;
+            const mouseY = (e.clientY - rect.top) * scaleY;
+            playerY = mouseY - paddleHeight / 2;
+            
+            // Keep paddle in bounds
+            if (playerY < 0) playerY = 0;
+            if (playerY > canvas.height - paddleHeight) playerY = canvas.height - paddleHeight;
+        });
+
+        // Touch support for mobile
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const scaleY = canvas.height / rect.height;
+            const touchY = e.touches[0].clientY - rect.top;
+            playerY = (touchY * scaleY) - paddleHeight / 2;
+            if (playerY < 0) playerY = 0;
+            if (playerY > canvas.height - paddleHeight) playerY = canvas.height - paddleHeight;
+        }, { passive: false });
+
+        function resetBall() {
+            ballX = canvas.width / 2;
+            ballY = canvas.height / 2;
+            ballSpeedX = -ballSpeedX;
+            ballSpeedY = (Math.random() * 4) - 2; // random y direction
+        }
+
+        function update() {
+            // Move ball
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            // Top/bottom bounce
+            if (ballY - ballRadius < 0 || ballY + ballRadius > canvas.height) {
+                ballSpeedY = -ballSpeedY;
+            }
+
+            // AI movement (simple tracking)
+            let aiCenter = aiY + paddleHeight / 2;
+            if (aiCenter < ballY - 10) aiY += 4;
+            else if (aiCenter > ballY + 10) aiY -= 4;
+
+            // Keep AI in bounds
+            if (aiY < 0) aiY = 0;
+            if (aiY > canvas.height - paddleHeight) aiY = canvas.height - paddleHeight;
+
+            // Paddle collisions
+            // Left paddle (Player)
+            if (ballX - ballRadius < paddleWidth) {
+                if (ballY > playerY && ballY < playerY + paddleHeight) {
+                    ballSpeedX = -ballSpeedX;
+                    // Add some english based on where it hits
+                    let deltaY = ballY - (playerY + paddleHeight / 2);
+                    ballSpeedY = deltaY * 0.3;
+                } else if (ballX - ballRadius < 0) {
+                    aiScore++;
+                    resetBall();
+                }
+            }
+
+            // Right paddle (AI)
+            if (ballX + ballRadius > canvas.width - paddleWidth) {
+                if (ballY > aiY && ballY < aiY + paddleHeight) {
+                    ballSpeedX = -ballSpeedX;
+                    let deltaY = ballY - (aiY + paddleHeight / 2);
+                    ballSpeedY = deltaY * 0.3;
+                } else if (ballX + ballRadius > canvas.width) {
+                    playerScore++;
+                    resetBall();
+                }
+            }
+        }
+
+        function draw() {
+            // Clear screen
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw net
+            ctx.strokeStyle = '#fff';
+            ctx.setLineDash([10, 10]);
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]); // reset
+
+            // Draw paddles
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, playerY, paddleWidth, paddleHeight); // player
+            ctx.fillRect(canvas.width - paddleWidth, aiY, paddleWidth, paddleHeight); // AI
+
+            // Draw ball
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw scores
+            ctx.font = '32px monospace';
+            ctx.fillText(playerScore, canvas.width / 4, 50);
+            ctx.fillText(aiScore, (canvas.width / 4) * 3, 50);
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        gameLoop();
+    </script>
 </body>
 </html>
