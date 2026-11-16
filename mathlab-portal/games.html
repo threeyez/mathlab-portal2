@@ -6,7 +6,6 @@
     <title>MathLab Portal</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Modern UI overrides */
         :root {
             --bg: #0f111a;
             --surface: #1a1d27;
@@ -21,56 +20,173 @@
         body {
             background-color: var(--bg);
             color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
         }
+
+        main { flex: 1; }
 
         header {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 32px;
         }
 
-        header h1 { color: var(--text); }
+        header h1 { color: var(--text); font-size: 1.4rem; margin: 0; }
         
-        .back-link { color: var(--accent); }
+        .header-actions { display: flex; gap: 16px; align-items: center; }
+
+        .back-link { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
         .back-link:hover { text-decoration: underline; }
+
+        #settings-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        }
+        #settings-btn:hover { color: var(--text); transform: rotate(45deg); }
 
         .game-grid {
             max-width: 1200px;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            margin: 32px auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
         }
 
         .game-card {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 12px;
+            overflow: hidden;
             transition: transform 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+            position: relative;
         }
 
         .game-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-4px);
             border-color: var(--accent);
         }
 
+        .game-thumb {
+            height: 200px;
+            background: #0a0c12;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+        .game-thumb span { position: absolute; font-weight: bold; font-size: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+
         .game-card h3 {
-            padding: 16px 16px 0 16px;
+            padding: 16px;
+            margin: 0;
             font-size: 1.1rem;
             font-weight: 600;
+            text-align: center;
         }
 
-        .game-thumb {
-            background: #0a0c12;
-            border-bottom: 1px solid var(--border);
+        /* Modals (Settings, Admin, Game Player) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
         }
 
-        .game-frame { background: #000; }
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            position: relative;
+        }
 
-        .launch-btn {
+        .modal-content h2 { margin-top: 0; margin-bottom: 16px; font-size: 1.2rem; text-align: center;}
+        
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .modal-content input:focus { border-color: var(--accent); }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
             background: var(--accent);
-            border-radius: 8px;
-            margin: 16px;
-            transition: background 0.2s;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-primary:hover { background: var(--accent-hover); }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .btn-secondary:hover { color: var(--text); }
+
+        /* Game Player Fullscreen Modal */
+        #game-modal {
+            background: #000;
+            flex-direction: column;
         }
 
-        .launch-btn:hover { background: var(--accent-hover); }
+        #game-modal iframe, #game-modal canvas, #game-modal #run3-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .close-game-btn {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            z-index: 2001;
+            font-weight: bold;
+        }
 
         /* Live Event Banner */
         #live-event-banner {
@@ -83,7 +199,7 @@
             padding: 12px;
             font-weight: bold;
             font-size: 1.2rem;
-            z-index: 1000;
+            z-index: 3000;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             animation: slideDown 0.3s ease;
         }
@@ -93,146 +209,183 @@
             to { transform: translateY(0); }
         }
 
-        /* Admin Panel Modal */
-        #admin-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
+        /* User List Table */
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 0.9rem;
         }
+        .user-table th, .user-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .user-table th { color: var(--accent); }
 
-        .admin-content {
-            background: var(--surface);
-            border: 1px solid var(--border);
+        /* Footer */
+        footer {
+            text-align: center;
             padding: 24px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
-        .admin-content h2 { margin-bottom: 16px; font-size: 1.2rem; }
-        
-        .admin-content input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 16px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 6px;
-            outline: none;
-        }
-
-        .admin-content input:focus { border-color: var(--accent); }
-
-        .admin-content button {
-            width: 100%;
-            padding: 10px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
             font-weight: bold;
-        }
-
-        .admin-content button:hover { background: var(--accent-hover); }
-
-        /* Secret Admin Button (bottom right corner) */
-        #admin-trigger {
-            position: fixed;
-            bottom: 10px; right: 10px;
-            width: 20px; height: 20px;
-            opacity: 0;
-            cursor: default;
         }
     </style>
 </head>
 <body>
-    <!-- Live Event Banner -->
     <div id="live-event-banner"></div>
 
-    <!-- Secret Admin Trigger -->
-    <div id="admin-trigger" title="Admin Access"></div>
-
-    <!-- Admin Login Modal -->
-    <div id="admin-modal">
-        <div class="admin-content">
-            <h2>Admin Login</h2>
-            <input type="password" id="admin-pass" placeholder="Enter password">
-            <button onclick="checkPassword()">Login</button>
-            <button onclick="closeAdmin()" style="background:transparent; color:var(--text-muted); margin-top:8px;">Cancel</button>
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h2>User Settings</h2>
+            <input type="text" id="username-input" placeholder="Enter username...">
+            <button class="btn-primary" onclick="saveUsername()">Save Username</button>
+            <button class="btn-secondary" onclick="closeModal('settings-modal')">Cancel</button>
         </div>
     </div>
 
-    <!-- Admin Control Panel (Hidden by default) -->
-    <div id="admin-controls" style="display:none; position:fixed; bottom:20px; left:20px; background:var(--surface); padding:16px; border:1px solid var(--accent); border-radius:12px; z-index:2000; box-shadow:0 0 20px rgba(59,130,246,0.2);">
-        <h3 style="margin-bottom:8px; font-size:0.9rem; color:var(--accent);">Live Broadcast System</h3>
-        <input type="text" id="event-input" placeholder="Type event message..." style="width:100%; padding:8px; background:var(--bg); border:1px solid var(--border); color:white; border-radius:4px; margin-bottom:8px;">
-        <div style="display:flex; gap:8px;">
-            <button onclick="sendEvent()" style="flex:1; padding:8px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer;">Send</button>
-            <button onclick="clearEvent()" style="flex:1; padding:8px; background:var(--danger); color:white; border:none; border-radius:4px; cursor:pointer;">Clear</button>
+    <!-- Admin Modal (Triggered via settings) -->
+    <div id="admin-modal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h2>Admin Panel</h2>
+            
+            <div style="margin-bottom: 20px; display: flex; gap: 8px;">
+                <input type="text" id="event-input" placeholder="Type live event..." style="margin-bottom:0;">
+                <button class="btn-primary" onclick="sendEvent()" style="width: 80px;">Send</button>
+                <button class="btn-primary" style="width: 80px; background: var(--danger);" onclick="clearEvent()">Clear</button>
+            </div>
+
+            <h3 style="font-size: 1rem; margin-bottom: 0;">Registered Users</h3>
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Last Seen</th>
+                    </tr>
+                </thead>
+                <tbody id="user-list">
+                    <!-- Filled by JS -->
+                </tbody>
+            </table>
+
+            <button class="btn-secondary" onclick="closeModal('admin-modal')" style="margin-top: 20px;">Close Panel</button>
         </div>
     </div>
 
-    <header class="compact">
-        <h1>Interactive Learning Modules</h1>
-        <a href="index.html" class="back-link">← Back to Portal</a>
+    <!-- Fullscreen Game Player Modal -->
+    <div id="game-modal" class="modal">
+        <button class="close-game-btn" onclick="closeGame()">✖ Close Game</button>
+        <div id="game-container" style="width:100%; height:100%;"></div>
+    </div>
+
+    <header>
+        <div>
+            <h1>Interactive Learning Modules</h1>
+        </div>
+        <div class="header-actions">
+            <a href="index.html" class="back-link">← Back to Portal</a>
+            <button id="settings-btn" onclick="openSettings()">⚙</button>
+        </div>
     </header>
 
     <main class="game-grid">
         <!-- Paper.io 2 -->
-        <div class="game-card">
-            <div class="game-frame">
-                <div class="iframe-wrapper" style="position: relative; width: 100%; height: 100%;">
-                    <iframe src="https://nite.games/embed/paper-io-2" 
-                            allow="fullscreen; autoplay; gamepad; pointer-lock" 
-                            loading="lazy" style="width:100%; height:100%; border:none;"></iframe>
-                </div>
+        <div class="game-card" onclick="loadGame('paperio')">
+            <div class="game-thumb">
+                <span>Paper.io 2</span>
             </div>
             <h3>Paper.io 2</h3>
         </div>
 
-        <!-- Local Pong Game -->
-        <div class="game-card">
-            <div class="game-frame" style="position: relative; padding-bottom: 56.25%; height: 0;">
-                <div id="pong-container" style="position: absolute; top:0; left:0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center;">
-                    <canvas id="pong-canvas" width="800" height="450" style="max-width: 100%; max-height: 100%; display: block;"></canvas>
-                </div>
+        <!-- Pong -->
+        <div class="game-card" onclick="loadGame('pong')">
+            <div class="game-thumb">
+                <span>Pong</span>
             </div>
             <h3>Pong</h3>
         </div>
 
+        <!-- Run 3 -->
+        <div class="game-card" onclick="loadGame('run3')">
+            <div class="game-thumb">
+                <span>Run 3</span>
+            </div>
+            <h3>Run 3</h3>
+        </div>
+
         <!-- FIFA 14 -->
-        <div class="game-card">
-            <div class="game-thumb fifa-thumb">
+        <div class="game-card" onclick="window.open('https://ported2browser.org/games/fifa-14/', '_blank')">
+            <div class="game-thumb">
                 <span>FIFA 14</span>
             </div>
             <h3>FIFA 14</h3>
-            <a href="https://ported2browser.org/games/fifa-14/" target="_blank" class="launch-btn">Launch Game</a>
-        </div>
-
-        <!-- FIFA 10-13 -->
-        <div class="game-card">
-            <div class="game-thumb fifa-thumb">
-                <span>FIFA 10–13</span>
-            </div>
-            <h3>FIFA Legacy</h3>
-            <a href="https://www.inxanitylabs.com/games/page/3" target="_blank" class="launch-btn">Launch Archive</a>
         </div>
     </main>
 
+    <footer>
+        Made by Mr Branker and Mr Kenwright!!!
+    </footer>
+
     <script>
+        // ==========================================
+        // USER & ADMIN SYSTEM
+        // ==========================================
+        function openSettings() {
+            const currentName = localStorage.getItem('myUsername') || '';
+            document.getElementById('username-input').value = currentName;
+            document.getElementById('settings-modal').style.display = 'flex';
+        }
+
+        function saveUsername() {
+            const name = document.getElementById('username-input').value.trim();
+            if (!name) return;
+
+            if (name.toLowerCase() === 'admin') {
+                closeModal('settings-modal');
+                openAdminPanel();
+                return;
+            }
+
+            localStorage.setItem('myUsername', name);
+            
+            // Save to global user list
+            let users = JSON.parse(localStorage.getItem('portal_users') || '{}');
+            users[name] = new Date().toLocaleTimeString();
+            localStorage.setItem('portal_users', JSON.stringify(users));
+
+            closeModal('settings-modal');
+        }
+
+        function openAdminPanel() {
+            // Populate User List
+            const users = JSON.parse(localStorage.getItem('portal_users') || '{}');
+            const tbody = document.getElementById('user-list');
+            tbody.innerHTML = '';
+            
+            if (Object.keys(users).length === 0) {
+                tbody.innerHTML = '<tr><td colspan="2">No users found.</td></tr>';
+            } else {
+                for (const [name, time] of Object.entries(users)) {
+                    tbody.innerHTML += `<tr><td>${name}</td><td>${time}</td></tr>`;
+                }
+            }
+
+            document.getElementById('admin-modal').style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
         // ==========================================
         // LIVE EVENT SYSTEM
         // ==========================================
         const banner = document.getElementById('live-event-banner');
 
-        // Check for active event on load
         function checkActiveEvent() {
             const activeEvent = localStorage.getItem('liveEvent');
             if (activeEvent) {
@@ -244,42 +397,9 @@
         }
         checkActiveEvent();
 
-        // Listen for changes from other tabs
         window.addEventListener('storage', (e) => {
-            if (e.key === 'liveEvent') {
-                checkActiveEvent();
-            }
+            if (e.key === 'liveEvent') checkActiveEvent();
         });
-
-        // ==========================================
-        // ADMIN PANEL LOGIC
-        // ==========================================
-        const trigger = document.getElementById('admin-trigger');
-        const modal = document.getElementById('admin-modal');
-        const passInput = document.getElementById('admin-pass');
-        const controls = document.getElementById('admin-controls');
-
-        // Secret trigger (click invisible square in bottom right)
-        trigger.addEventListener('click', () => {
-            modal.style.display = 'flex';
-            passInput.focus();
-        });
-
-        function checkPassword() {
-            if (passInput.value === 'jak67') {
-                modal.style.display = 'none';
-                controls.style.display = 'block';
-                passInput.value = ''; // clear
-            } else {
-                alert('Incorrect password');
-                passInput.value = '';
-            }
-        }
-
-        function closeAdmin() {
-            modal.style.display = 'none';
-            passInput.value = '';
-        }
 
         function sendEvent() {
             const msg = document.getElementById('event-input').value;
@@ -297,124 +417,142 @@
             document.getElementById('event-input').value = '';
         }
 
-        // Enter key support for password
-        passInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkPassword();
-        });
+        // ==========================================
+        // GAME LOADER & PAUSE LOGIC
+        // ==========================================
+        const gameContainer = document.getElementById('game-container');
+        let pongLoopId = null;
+
+        function loadGame(game) {
+            document.getElementById('game-modal').style.display = 'flex';
+            gameContainer.innerHTML = ''; // Clear previous
+
+            if (game === 'paperio') {
+                const iframe = document.createElement('iframe');
+                // Using a more reliable embeddable link
+                iframe.src = 'https://paper-io.com/embed/';
+                iframe.allow = 'fullscreen; autoplay; gamepad; pointer-lock';
+                gameContainer.appendChild(iframe);
+            } 
+            else if (game === 'run3') {
+                const iframe = document.createElement('iframe');
+                iframe.src = 'https://run3.io/embed/'; 
+                gameContainer.appendChild(iframe);
+            }
+            else if (game === 'pong') {
+                const canvas = document.createElement('canvas');
+                canvas.width = 800;
+                canvas.height = 450;
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                canvas.style.objectFit = 'contain';
+                gameContainer.appendChild(canvas);
+                startPong(canvas);
+            }
+        }
+
+        function closeGame() {
+            document.getElementById('game-modal').style.display = 'none';
+            gameContainer.innerHTML = ''; // This instantly kills iframes and pauses them
+            if (pongLoopId) {
+                cancelAnimationFrame(pongLoopId);
+                pongLoopId = null;
+            }
+        }
 
         // ==========================================
         // LOCAL PONG GAME
         // ==========================================
-        const canvas = document.getElementById('pong-canvas');
-        const ctx = canvas.getContext('2d');
+        function startPong(canvas) {
+            const ctx = canvas.getContext('2d');
+            const paddleWidth = 10, paddleHeight = 80;
+            const ballRadius = 8;
+            let playerY = (canvas.height - paddleHeight) / 2;
+            let aiY = (canvas.height - paddleHeight) / 2;
+            let ballX = canvas.width / 2;
+            let ballY = canvas.height / 2;
+            let ballSpeedX = 5;
+            let ballSpeedY = 5;
+            let playerScore = 0;
+            let aiScore = 0;
 
-        const paddleWidth = 10, paddleHeight = 80;
-        const ballRadius = 8;
-        let playerY = (canvas.height - paddleHeight) / 2;
-        let aiY = (canvas.height - paddleHeight) / 2;
-        let ballX = canvas.width / 2;
-        let ballY = canvas.height / 2;
-        let ballSpeedX = 5;
-        let ballSpeedY = 5;
-        let playerScore = 0;
-        let aiScore = 0;
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const scaleY = canvas.height / rect.height;
+                const mouseY = (e.clientY - rect.top) * scaleY;
+                playerY = mouseY - paddleHeight / 2;
+                if (playerY < 0) playerY = 0;
+                if (playerY > canvas.height - paddleHeight) playerY = canvas.height - paddleHeight;
+            });
 
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const scaleY = canvas.height / rect.height;
-            const mouseY = (e.clientY - rect.top) * scaleY;
-            playerY = mouseY - paddleHeight / 2;
-            if (playerY < 0) playerY = 0;
-            if (playerY > canvas.height - paddleHeight) playerY = canvas.height - paddleHeight;
-        });
-
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            const scaleY = canvas.height / rect.height;
-            const touchY = e.touches[0].clientY - rect.top;
-            playerY = (touchY * scaleY) - paddleHeight / 2;
-            if (playerY < 0) playerY = 0;
-            if (playerY > canvas.height - paddleHeight) playerY = canvas.height - paddleHeight;
-        }, { passive: false });
-
-        function resetBall() {
-            ballX = canvas.width / 2;
-            ballY = canvas.height / 2;
-            ballSpeedX = -ballSpeedX;
-            ballSpeedY = (Math.random() * 4) - 2;
-        }
-
-        function update() {
-            ballX += ballSpeedX;
-            ballY += ballSpeedY;
-
-            if (ballY - ballRadius < 0 || ballY + ballRadius > canvas.height) {
-                ballSpeedY = -ballSpeedY;
+            function resetBall() {
+                ballX = canvas.width / 2;
+                ballY = canvas.height / 2;
+                ballSpeedX = -ballSpeedX;
+                ballSpeedY = (Math.random() * 4) - 2;
             }
 
-            let aiCenter = aiY + paddleHeight / 2;
-            if (aiCenter < ballY - 10) aiY += 4;
-            else if (aiCenter > ballY + 10) aiY -= 4;
+            function update() {
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
 
-            if (aiY < 0) aiY = 0;
-            if (aiY > canvas.height - paddleHeight) aiY = canvas.height - paddleHeight;
+                if (ballY - ballRadius < 0 || ballY + ballRadius > canvas.height) ballSpeedY = -ballSpeedY;
 
-            if (ballX - ballRadius < paddleWidth) {
-                if (ballY > playerY && ballY < playerY + paddleHeight) {
-                    ballSpeedX = -ballSpeedX;
-                    let deltaY = ballY - (playerY + paddleHeight / 2);
-                    ballSpeedY = deltaY * 0.3;
-                } else if (ballX - ballRadius < 0) {
-                    aiScore++;
-                    resetBall();
+                let aiCenter = aiY + paddleHeight / 2;
+                if (aiCenter < ballY - 10) aiY += 4;
+                else if (aiCenter > ballY + 10) aiY -= 4;
+                if (aiY < 0) aiY = 0;
+                if (aiY > canvas.height - paddleHeight) aiY = canvas.height - paddleHeight;
+
+                if (ballX - ballRadius < paddleWidth) {
+                    if (ballY > playerY && ballY < playerY + paddleHeight) {
+                        ballSpeedX = -ballSpeedX;
+                        ballSpeedY = (ballY - (playerY + paddleHeight / 2)) * 0.3;
+                    } else if (ballX - ballRadius < 0) {
+                        aiScore++;
+                        resetBall();
+                    }
+                }
+
+                if (ballX + ballRadius > canvas.width - paddleWidth) {
+                    if (ballY > aiY && ballY < aiY + paddleHeight) {
+                        ballSpeedX = -ballSpeedX;
+                        ballSpeedY = (ballY - (aiY + paddleHeight / 2)) * 0.3;
+                    } else if (ballX + ballRadius > canvas.width) {
+                        playerScore++;
+                        resetBall();
+                    }
                 }
             }
 
-            if (ballX + ballRadius > canvas.width - paddleWidth) {
-                if (ballY > aiY && ballY < aiY + paddleHeight) {
-                    ballSpeedX = -ballSpeedX;
-                    let deltaY = ballY - (aiY + paddleHeight / 2);
-                    ballSpeedY = deltaY * 0.3;
-                } else if (ballX + ballRadius > canvas.width) {
-                    playerScore++;
-                    resetBall();
-                }
+            function draw() {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = '#fff';
+                ctx.setLineDash([10, 10]);
+                ctx.beginPath();
+                ctx.moveTo(canvas.width / 2, 0);
+                ctx.lineTo(canvas.width / 2, canvas.height);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, playerY, paddleWidth, paddleHeight);
+                ctx.fillRect(canvas.width - paddleWidth, aiY, paddleWidth, paddleHeight);
+                ctx.beginPath();
+                ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.font = '32px monospace';
+                ctx.fillText(playerScore, canvas.width / 4, 50);
+                ctx.fillText(aiScore, (canvas.width / 4) * 3, 50);
             }
+
+            function loop() {
+                update();
+                draw();
+                pongLoopId = requestAnimationFrame(loop);
+            }
+            loop();
         }
-
-        function draw() {
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.strokeStyle = '#fff';
-            ctx.setLineDash([10, 10]);
-            ctx.beginPath();
-            ctx.moveTo(canvas.width / 2, 0);
-            ctx.lineTo(canvas.width / 2, canvas.height);
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(0, playerY, paddleWidth, paddleHeight);
-            ctx.fillRect(canvas.width - paddleWidth, aiY, paddleWidth, paddleHeight);
-
-            ctx.beginPath();
-            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.font = '32px monospace';
-            ctx.fillText(playerScore, canvas.width / 4, 50);
-            ctx.fillText(aiScore, (canvas.width / 4) * 3, 50);
-        }
-
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-
-        gameLoop();
     </script>
 </body>
 </html>
