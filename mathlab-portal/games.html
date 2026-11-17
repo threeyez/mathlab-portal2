@@ -44,15 +44,49 @@
         .back-link { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
         .back-link:hover { text-decoration: underline; }
 
-        #settings-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: transform 0.2s;
+        /* Username / Admin Login Section */
+        .login-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 24px;
+            padding: 20px;
+            text-align: center;
         }
-        #settings-btn:hover { color: var(--text); transform: rotate(45deg); }
+        .login-section h3 { margin-top: 0; margin-bottom: 12px; font-size: 1rem; color: var(--text-muted); font-weight: normal;}
+        
+        .login-input-group {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-input-group input {
+            flex: 1;
+            padding: 10px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .login-input-group input:focus { border-color: var(--accent); }
+
+        .login-input-group button {
+            padding: 10px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .login-input-group button:hover { background: var(--accent-hover); }
 
         /* Leaderboard */
         .leaderboard-section {
@@ -124,7 +158,7 @@
             text-align: center;
         }
 
-        /* Modals */
+        /* Admin Modal */
         .modal {
             display: none;
             position: fixed;
@@ -142,7 +176,7 @@
             padding: 24px;
             border-radius: 12px;
             width: 100%;
-            max-width: 400px;
+            max-width: 700px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
@@ -159,8 +193,6 @@
             outline: none;
             box-sizing: border-box;
         }
-
-        .modal-content input:focus { border-color: var(--accent); }
 
         .btn-primary {
             width: 100%;
@@ -242,19 +274,9 @@
 <body>
     <div id="live-event-banner"></div>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="modal">
-        <div class="modal-content">
-            <h2>User Settings</h2>
-            <input type="text" id="username-input" placeholder="Enter username...">
-            <button class="btn-primary" onclick="saveUsername()">Save Username</button>
-            <button class="btn-secondary" onclick="closeModal('settings-modal')">Cancel</button>
-        </div>
-    </div>
-
     <!-- Admin Modal -->
     <div id="admin-modal" class="modal">
-        <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-content">
             <h2>Admin Panel</h2>
             
             <div style="margin-bottom: 20px; display: flex; gap: 8px;">
@@ -293,11 +315,19 @@
         <div><h1>Interactive Learning Modules</h1></div>
         <div class="header-actions">
             <a href="index.html" class="back-link">← Back to Portal</a>
-            <button id="settings-btn" onclick="openSettings()">⚙</button>
         </div>
     </header>
 
     <main>
+        <!-- Set Username / Admin Login -->
+        <div class="login-section">
+            <h3 id="login-title">Enter your username to save your stats</h3>
+            <div class="login-input-group">
+                <input type="text" id="username-input" placeholder="Username...">
+                <button onclick="handleLogin()">Set User</button>
+            </div>
+        </div>
+
         <!-- Leaderboard -->
         <div class="leaderboard-section">
             <h2>🏆 Global Leaderboard (Total Playtime)</h2>
@@ -345,33 +375,33 @@
 
     <script>
         // ==========================================
-        // USER & SETTINGS SYSTEM
+        // USER & ADMIN LOGIN SYSTEM
         // ==========================================
-        function openSettings() {
-            const currentName = localStorage.getItem('myUsername') || '';
-            document.getElementById('username-input').value = currentName;
-            document.getElementById('settings-modal').style.display = 'flex';
-        }
+        function handleLogin() {
+            const input = document.getElementById('username-input').value.trim();
+            if (!input) return;
 
-        function saveUsername() {
-            const name = document.getElementById('username-input').value.trim();
-            if (!name) return;
-
-            if (name.toLowerCase() === 'pennyml') {
-                closeModal('settings-modal');
+            // Check if they entered the admin password
+            if (input === 'pennyml') {
+                document.getElementById('username-input').value = '';
                 openAdminPanel();
                 return;
             }
 
-            localStorage.setItem('myUsername', name);
+            // Otherwise, save as a normal username
+            localStorage.setItem('myUsername', input);
             
             let users = JSON.parse(localStorage.getItem('portal_users') || '{}');
-            if (!users[name]) users[name] = { playtime: 0, lastSeen: '' };
+            if (!users[input]) users[input] = { playtime: 0, lastSeen: '' };
             
-            users[name].lastSeen = new Date().toLocaleTimeString();
+            users[input].lastSeen = new Date().toLocaleTimeString();
             localStorage.setItem('portal_users', JSON.stringify(users));
 
-            closeModal('settings-modal');
+            // Update UI to show they are logged in
+            document.getElementById('login-title').textContent = `Logged in as: ${input}`;
+            document.getElementById('username-input').value = '';
+            document.getElementById('username-input').placeholder = "Change username...";
+            
             updateLeaderboard();
         }
 
@@ -391,7 +421,6 @@
             if (Object.keys(users).length === 0) {
                 tbody.innerHTML = '<tr><td colspan="3">No users found.</td></tr>';
             } else {
-                // Sort by playtime
                 const sorted = Object.entries(users).sort((a, b) => b[1].playtime - a[1].playtime);
                 for (const [name, data] of sorted) {
                     const mins = Math.floor(data.playtime / 60);
@@ -461,9 +490,9 @@
             tbody.innerHTML = '';
 
             const sorted = Object.entries(users)
-                .filter(([name, data]) => data.playtime > 0) // Only show people who played
+                .filter(([name, data]) => data.playtime > 0)
                 .sort((a, b) => b[1].playtime - a[1].playtime)
-                .slice(0, 10); // Top 10
+                .slice(0, 10);
 
             if (sorted.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="3">No playtime recorded yet. Start playing!</td></tr>';
@@ -475,7 +504,6 @@
                 const secs = data.playtime % 60;
                 const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
                 
-                // Add medal icons for top 3
                 let rank = index + 1;
                 if (rank === 1) rank = '🥇';
                 else if (rank === 2) rank = '🥈';
@@ -489,13 +517,12 @@
             });
         }
 
-        // Playtime tracking logic
         let activePlaySession = null;
         let playSessionStart = null;
 
         function startPlaySession() {
             const currentUser = localStorage.getItem('myUsername');
-            if (!currentUser) return; // Don't track if they don't have a username
+            if (!currentUser) return;
 
             playSessionStart = Date.now();
             activePlaySession = currentUser;
@@ -525,7 +552,6 @@
         const gameContainer = document.getElementById('game-container');
 
         function loadGame(game) {
-            // Start tracking time when game opens
             startPlaySession();
 
             document.getElementById('game-modal').style.display = 'flex';
@@ -555,15 +581,21 @@
         }
 
         function closeGame() {
-            // Stop tracking time when game closes
             endPlaySession();
 
             document.getElementById('game-modal').style.display = 'none';
             gameContainer.innerHTML = ''; 
         }
 
-        // Initial load
+        // Initial Load setup
         updateLeaderboard();
+        
+        // Check if user already has a username saved
+        const savedName = localStorage.getItem('myUsername');
+        if (savedName) {
+            document.getElementById('login-title').textContent = `Logged in as: ${savedName}`;
+            document.getElementById('username-input').placeholder = "Change username...";
+        }
     </script>
 </body>
 </html>
