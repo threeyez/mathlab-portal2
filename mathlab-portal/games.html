@@ -15,6 +15,7 @@
             --accent: #3b82f6;
             --accent-hover: #2563eb;
             --danger: #ef4444;
+            --success: #22c55e;
         }
 
         body {
@@ -26,7 +27,7 @@
             margin: 0;
         }
 
-        main { flex: 1; }
+        main { flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; padding: 0 24px; }
 
         header {
             background: var(--surface);
@@ -38,7 +39,6 @@
         }
 
         header h1 { color: var(--text); font-size: 1.4rem; margin: 0; }
-        
         .header-actions { display: flex; gap: 16px; align-items: center; }
 
         .back-link { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
@@ -54,10 +54,37 @@
         }
         #settings-btn:hover { color: var(--text); transform: rotate(45deg); }
 
+        /* Leaderboard */
+        .leaderboard-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 24px;
+            padding: 20px;
+        }
+        .leaderboard-section h2 {
+            font-size: 1.2rem;
+            margin-top: 0;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .leaderboard-table th { color: var(--text-muted); font-weight: 600; }
+        .leaderboard-table tr:last-child td { border-bottom: none; }
+
         .game-grid {
-            max-width: 1200px;
-            margin: 32px auto;
-            padding: 0 24px;
+            margin: 32px 0;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 24px;
@@ -70,7 +97,6 @@
             overflow: hidden;
             transition: transform 0.2s ease, border-color 0.2s ease;
             cursor: pointer;
-            position: relative;
         }
 
         .game-card:hover {
@@ -86,10 +112,9 @@
             justify-content: center;
             border-bottom: 1px solid var(--border);
             position: relative;
-            overflow: hidden;
         }
 
-        .game-thumb span { position: absolute; font-weight: bold; font-size: 1.3rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8); color: white; }
+        .game-thumb span { font-weight: bold; font-size: 1.3rem; color: white; }
 
         .game-card h3 {
             padding: 16px;
@@ -119,7 +144,6 @@
             width: 100%;
             max-width: 400px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            position: relative;
         }
 
         .modal-content h2 { margin-top: 0; margin-bottom: 16px; font-size: 1.2rem; text-align: center;}
@@ -161,18 +185,9 @@
         }
         .btn-secondary:hover { color: var(--text); }
 
-        /* Game Player Fullscreen Modal */
-        #game-modal {
-            background: #000;
-            flex-direction: column;
-        }
-
-        #game-modal iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
+        /* Game Player Modal */
+        #game-modal { background: #000; flex-direction: column; }
+        #game-modal iframe { width: 100%; height: 100%; border: none; display: block; }
 
         .close-game-btn {
             position: absolute;
@@ -208,21 +223,11 @@
             to { transform: translateY(0); }
         }
 
-        /* User List Table */
-        .user-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-            font-size: 0.9rem;
-        }
-        .user-table th, .user-table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
+        /* Admin User List Table */
+        .user-table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.9rem; }
+        .user-table th, .user-table td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); }
         .user-table th { color: var(--accent); }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 24px;
@@ -249,7 +254,7 @@
 
     <!-- Admin Modal -->
     <div id="admin-modal" class="modal">
-        <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-content" style="max-width: 700px;">
             <h2>Admin Panel</h2>
             
             <div style="margin-bottom: 20px; display: flex; gap: 8px;">
@@ -258,15 +263,20 @@
                 <button class="btn-primary" style="width: 80px; background: var(--danger);" onclick="clearEvent()">Clear</button>
             </div>
 
-            <h3 style="font-size: 1rem; margin-bottom: 0;">Registered Users</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 1rem; margin: 0;">Registered Users</h3>
+                <button class="btn-secondary" style="width: auto; margin: 0; padding: 4px 8px; font-size: 0.8rem;" onclick="resetStats()">Reset Stats</button>
+            </div>
+            
             <table class="user-table">
                 <thead>
                     <tr>
                         <th>Username</th>
+                        <th>Total Playtime (Mins)</th>
                         <th>Last Seen</th>
                     </tr>
                 </thead>
-                <tbody id="user-list"></tbody>
+                <tbody id="admin-user-list"></tbody>
             </table>
 
             <button class="btn-secondary" onclick="closeModal('admin-modal')" style="margin-top: 20px;">Close Panel</button>
@@ -280,38 +290,52 @@
     </div>
 
     <header>
-        <div>
-            <h1>Interactive Learning Modules</h1>
-        </div>
+        <div><h1>Interactive Learning Modules</h1></div>
         <div class="header-actions">
             <a href="index.html" class="back-link">← Back to Portal</a>
             <button id="settings-btn" onclick="openSettings()">⚙</button>
         </div>
     </header>
 
-    <main class="game-grid">
-        <!-- Paper.io 2 -->
-        <div class="game-card" onclick="loadGame('paperio')">
-            <div class="game-thumb"><span>Paper.io 2</span></div>
-            <h3>Paper.io 2</h3>
+    <main>
+        <!-- Leaderboard -->
+        <div class="leaderboard-section">
+            <h2>🏆 Global Leaderboard (Total Playtime)</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Total Time</th>
+                    </tr>
+                </thead>
+                <tbody id="public-leaderboard">
+                    <tr><td colspan="3">Loading stats...</td></tr>
+                </tbody>
+            </table>
         </div>
 
-        <!-- Run 3 -->
-        <div class="game-card" onclick="loadGame('run3')">
-            <div class="game-thumb"><span>Run 3</span></div>
-            <h3>Run 3</h3>
-        </div>
+        <!-- Games Grid -->
+        <div class="game-grid">
+            <div class="game-card" onclick="loadGame('paperio')">
+                <div class="game-thumb"><span>Paper.io 2</span></div>
+                <h3>Paper.io 2</h3>
+            </div>
 
-        <!-- FIFA 97 -->
-        <div class="game-card" onclick="loadGame('fifa97')">
-            <div class="game-thumb"><span>FIFA 97</span></div>
-            <h3>FIFA 97</h3>
-        </div>
+            <div class="game-card" onclick="loadGame('run3')">
+                <div class="game-thumb"><span>Run 3</span></div>
+                <h3>Run 3</h3>
+            </div>
 
-        <!-- Football Manager -->
-        <div class="game-card" onclick="loadGame('fm')">
-            <div class="game-thumb"><span>Football Manager</span></div>
-            <h3>Football Manager</h3>
+            <div class="game-card" onclick="loadGame('fifa97')">
+                <div class="game-thumb"><span>FIFA 97</span></div>
+                <h3>FIFA 97</h3>
+            </div>
+
+            <div class="game-card" onclick="loadGame('fm')">
+                <div class="game-thumb"><span>Football Manager</span></div>
+                <h3>Football Manager</h3>
+            </div>
         </div>
     </main>
 
@@ -321,7 +345,7 @@
 
     <script>
         // ==========================================
-        // USER & ADMIN SYSTEM
+        // USER & SETTINGS SYSTEM
         // ==========================================
         function openSettings() {
             const currentName = localStorage.getItem('myUsername') || '';
@@ -333,7 +357,7 @@
             const name = document.getElementById('username-input').value.trim();
             if (!name) return;
 
-            if (name.toLowerCase() === 'admin') {
+            if (name.toLowerCase() === 'pennyml') {
                 closeModal('settings-modal');
                 openAdminPanel();
                 return;
@@ -342,26 +366,50 @@
             localStorage.setItem('myUsername', name);
             
             let users = JSON.parse(localStorage.getItem('portal_users') || '{}');
-            users[name] = new Date().toLocaleTimeString();
+            if (!users[name]) users[name] = { playtime: 0, lastSeen: '' };
+            
+            users[name].lastSeen = new Date().toLocaleTimeString();
             localStorage.setItem('portal_users', JSON.stringify(users));
 
             closeModal('settings-modal');
+            updateLeaderboard();
         }
 
+        // ==========================================
+        // ADMIN SYSTEM
+        // ==========================================
         function openAdminPanel() {
+            updateAdminList();
+            document.getElementById('admin-modal').style.display = 'flex';
+        }
+
+        function updateAdminList() {
             const users = JSON.parse(localStorage.getItem('portal_users') || '{}');
-            const tbody = document.getElementById('user-list');
+            const tbody = document.getElementById('admin-user-list');
             tbody.innerHTML = '';
             
             if (Object.keys(users).length === 0) {
-                tbody.innerHTML = '<tr><td colspan="2">No users found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3">No users found.</td></tr>';
             } else {
-                for (const [name, time] of Object.entries(users)) {
-                    tbody.innerHTML += `<tr><td>${name}</td><td>${time}</td></tr>`;
+                // Sort by playtime
+                const sorted = Object.entries(users).sort((a, b) => b[1].playtime - a[1].playtime);
+                for (const [name, data] of sorted) {
+                    const mins = Math.floor(data.playtime / 60);
+                    tbody.innerHTML += `<tr>
+                        <td>${name}</td>
+                        <td>${mins}m</td>
+                        <td>${data.lastSeen}</td>
+                    </tr>`;
                 }
             }
+        }
 
-            document.getElementById('admin-modal').style.display = 'flex';
+        function resetStats() {
+            if(confirm("Are you sure you want to wipe all user stats?")) {
+                localStorage.removeItem('portal_users');
+                updateAdminList();
+                updateLeaderboard();
+            }
         }
 
         function closeModal(id) {
@@ -405,45 +453,117 @@
         }
 
         // ==========================================
+        // LEADERBOARD & PLAYTIME TRACKING
+        // ==========================================
+        function updateLeaderboard() {
+            const users = JSON.parse(localStorage.getItem('portal_users') || '{}');
+            const tbody = document.getElementById('public-leaderboard');
+            tbody.innerHTML = '';
+
+            const sorted = Object.entries(users)
+                .filter(([name, data]) => data.playtime > 0) // Only show people who played
+                .sort((a, b) => b[1].playtime - a[1].playtime)
+                .slice(0, 10); // Top 10
+
+            if (sorted.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3">No playtime recorded yet. Start playing!</td></tr>';
+                return;
+            }
+
+            sorted.forEach(([name, data], index) => {
+                const mins = Math.floor(data.playtime / 60);
+                const secs = data.playtime % 60;
+                const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+                
+                // Add medal icons for top 3
+                let rank = index + 1;
+                if (rank === 1) rank = '🥇';
+                else if (rank === 2) rank = '🥈';
+                else if (rank === 3) rank = '🥉';
+
+                tbody.innerHTML += `<tr>
+                    <td>${rank}</td>
+                    <td>${name}</td>
+                    <td>${timeStr}</td>
+                </tr>`;
+            });
+        }
+
+        // Playtime tracking logic
+        let activePlaySession = null;
+        let playSessionStart = null;
+
+        function startPlaySession() {
+            const currentUser = localStorage.getItem('myUsername');
+            if (!currentUser) return; // Don't track if they don't have a username
+
+            playSessionStart = Date.now();
+            activePlaySession = currentUser;
+        }
+
+        function endPlaySession() {
+            if (!activePlaySession || !playSessionStart) return;
+
+            const secondsPlayed = Math.floor((Date.now() - playSessionStart) / 1000);
+            
+            if (secondsPlayed > 0) {
+                let users = JSON.parse(localStorage.getItem('portal_users') || '{}');
+                if (users[activePlaySession]) {
+                    users[activePlaySession].playtime += secondsPlayed;
+                    localStorage.setItem('portal_users', JSON.stringify(users));
+                }
+            }
+
+            activePlaySession = null;
+            playSessionStart = null;
+            updateLeaderboard();
+        }
+
+        // ==========================================
         // GAME LOADER
         // ==========================================
         const gameContainer = document.getElementById('game-container');
 
         function loadGame(game) {
+            // Start tracking time when game opens
+            startPlaySession();
+
             document.getElementById('game-modal').style.display = 'flex';
             gameContainer.innerHTML = ''; 
 
             if (game === 'paperio') {
                 const iframe = document.createElement('iframe');
-                // Direct game embed, not the main website
                 iframe.src = 'https://paper-io.com/embed/'; 
                 iframe.allow = 'fullscreen; autoplay; gamepad; pointer-lock';
                 gameContainer.appendChild(iframe);
             } 
             else if (game === 'run3') {
                 const iframe = document.createElement('iframe');
-                // Reliable HTML5 Run 3 embed
                 iframe.src = 'https://run3-unblocked.org/'; 
                 gameContainer.appendChild(iframe);
             }
             else if (game === 'fifa97') {
                 const iframe = document.createElement('iframe');
-                // SNES emulator embed for FIFA 97
                 iframe.src = 'https://getretrogames.com/game/embed/fifa-97-europe-en-fr-de-es-it-sv-snes';
                 gameContainer.appendChild(iframe);
             }
             else if (game === 'fm') {
                 const iframe = document.createElement('iframe');
-                // Browser-based football manager game
                 iframe.src = 'https://douknowball.com/club-manager'; 
                 gameContainer.appendChild(iframe);
             }
         }
 
         function closeGame() {
+            // Stop tracking time when game closes
+            endPlaySession();
+
             document.getElementById('game-modal').style.display = 'none';
             gameContainer.innerHTML = ''; 
         }
+
+        // Initial load
+        updateLeaderboard();
     </script>
 </body>
 </html>
