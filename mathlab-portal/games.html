@@ -59,7 +59,7 @@
             margin: 32px auto;
             padding: 0 24px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 24px;
         }
 
@@ -79,7 +79,7 @@
         }
 
         .game-thumb {
-            height: 200px;
+            height: 160px;
             background: #0a0c12;
             display: flex;
             align-items: center;
@@ -89,18 +89,17 @@
             overflow: hidden;
         }
 
-        .game-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
-        .game-thumb span { position: absolute; font-weight: bold; font-size: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .game-thumb span { position: absolute; font-weight: bold; font-size: 1.3rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8); color: white; }
 
         .game-card h3 {
             padding: 16px;
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             text-align: center;
         }
 
-        /* Modals (Settings, Admin, Game Player) */
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -168,7 +167,7 @@
             flex-direction: column;
         }
 
-        #game-modal iframe, #game-modal canvas, #game-modal #run3-iframe {
+        #game-modal iframe {
             width: 100%;
             height: 100%;
             border: none;
@@ -248,7 +247,7 @@
         </div>
     </div>
 
-    <!-- Admin Modal (Triggered via settings) -->
+    <!-- Admin Modal -->
     <div id="admin-modal" class="modal">
         <div class="modal-content" style="max-width: 600px;">
             <h2>Admin Panel</h2>
@@ -267,9 +266,7 @@
                         <th>Last Seen</th>
                     </tr>
                 </thead>
-                <tbody id="user-list">
-                    <!-- Filled by JS -->
-                </tbody>
+                <tbody id="user-list"></tbody>
             </table>
 
             <button class="btn-secondary" onclick="closeModal('admin-modal')" style="margin-top: 20px;">Close Panel</button>
@@ -295,34 +292,26 @@
     <main class="game-grid">
         <!-- Paper.io 2 -->
         <div class="game-card" onclick="loadGame('paperio')">
-            <div class="game-thumb">
-                <span>Paper.io 2</span>
-            </div>
+            <div class="game-thumb"><span>Paper.io 2</span></div>
             <h3>Paper.io 2</h3>
-        </div>
-
-        <!-- Pong -->
-        <div class="game-card" onclick="loadGame('pong')">
-            <div class="game-thumb">
-                <span>Pong</span>
-            </div>
-            <h3>Pong</h3>
         </div>
 
         <!-- Run 3 -->
         <div class="game-card" onclick="loadGame('run3')">
-            <div class="game-thumb">
-                <span>Run 3</span>
-            </div>
+            <div class="game-thumb"><span>Run 3</span></div>
             <h3>Run 3</h3>
         </div>
 
-        <!-- FIFA 14 -->
-        <div class="game-card" onclick="window.open('https://ported2browser.org/games/fifa-14/', '_blank')">
-            <div class="game-thumb">
-                <span>FIFA 14</span>
-            </div>
-            <h3>FIFA 14</h3>
+        <!-- FIFA 97 -->
+        <div class="game-card" onclick="loadGame('fifa97')">
+            <div class="game-thumb"><span>FIFA 97</span></div>
+            <h3>FIFA 97</h3>
+        </div>
+
+        <!-- Football Manager -->
+        <div class="game-card" onclick="loadGame('fm')">
+            <div class="game-thumb"><span>Football Manager</span></div>
+            <h3>Football Manager</h3>
         </div>
     </main>
 
@@ -352,7 +341,6 @@
 
             localStorage.setItem('myUsername', name);
             
-            // Save to global user list
             let users = JSON.parse(localStorage.getItem('portal_users') || '{}');
             users[name] = new Date().toLocaleTimeString();
             localStorage.setItem('portal_users', JSON.stringify(users));
@@ -361,7 +349,6 @@
         }
 
         function openAdminPanel() {
-            // Populate User List
             const users = JSON.parse(localStorage.getItem('portal_users') || '{}');
             const tbody = document.getElementById('user-list');
             tbody.innerHTML = '';
@@ -418,140 +405,44 @@
         }
 
         // ==========================================
-        // GAME LOADER & PAUSE LOGIC
+        // GAME LOADER
         // ==========================================
         const gameContainer = document.getElementById('game-container');
-        let pongLoopId = null;
 
         function loadGame(game) {
             document.getElementById('game-modal').style.display = 'flex';
-            gameContainer.innerHTML = ''; // Clear previous
+            gameContainer.innerHTML = ''; 
 
             if (game === 'paperio') {
                 const iframe = document.createElement('iframe');
-                // Using a more reliable embeddable link
-                iframe.src = 'https://paper-io.com/embed/';
+                // Direct game embed, not the main website
+                iframe.src = 'https://paper-io.com/embed/'; 
                 iframe.allow = 'fullscreen; autoplay; gamepad; pointer-lock';
                 gameContainer.appendChild(iframe);
             } 
             else if (game === 'run3') {
                 const iframe = document.createElement('iframe');
-                iframe.src = 'https://run3.io/embed/'; 
+                // Reliable HTML5 Run 3 embed
+                iframe.src = 'https://run3-unblocked.org/'; 
                 gameContainer.appendChild(iframe);
             }
-            else if (game === 'pong') {
-                const canvas = document.createElement('canvas');
-                canvas.width = 800;
-                canvas.height = 450;
-                canvas.style.width = '100%';
-                canvas.style.height = '100%';
-                canvas.style.objectFit = 'contain';
-                gameContainer.appendChild(canvas);
-                startPong(canvas);
+            else if (game === 'fifa97') {
+                const iframe = document.createElement('iframe');
+                // SNES emulator embed for FIFA 97
+                iframe.src = 'https://getretrogames.com/game/embed/fifa-97-europe-en-fr-de-es-it-sv-snes';
+                gameContainer.appendChild(iframe);
+            }
+            else if (game === 'fm') {
+                const iframe = document.createElement('iframe');
+                // Browser-based football manager game
+                iframe.src = 'https://douknowball.com/club-manager'; 
+                gameContainer.appendChild(iframe);
             }
         }
 
         function closeGame() {
             document.getElementById('game-modal').style.display = 'none';
-            gameContainer.innerHTML = ''; // This instantly kills iframes and pauses them
-            if (pongLoopId) {
-                cancelAnimationFrame(pongLoopId);
-                pongLoopId = null;
-            }
-        }
-
-        // ==========================================
-        // LOCAL PONG GAME
-        // ==========================================
-        function startPong(canvas) {
-            const ctx = canvas.getContext('2d');
-            const paddleWidth = 10, paddleHeight = 80;
-            const ballRadius = 8;
-            let playerY = (canvas.height - paddleHeight) / 2;
-            let aiY = (canvas.height - paddleHeight) / 2;
-            let ballX = canvas.width / 2;
-            let ballY = canvas.height / 2;
-            let ballSpeedX = 5;
-            let ballSpeedY = 5;
-            let playerScore = 0;
-            let aiScore = 0;
-
-            canvas.addEventListener('mousemove', (e) => {
-                const rect = canvas.getBoundingClientRect();
-                const scaleY = canvas.height / rect.height;
-                const mouseY = (e.clientY - rect.top) * scaleY;
-                playerY = mouseY - paddleHeight / 2;
-                if (playerY < 0) playerY = 0;
-                if (playerY > canvas.height - paddleHeight) playerY = canvas.height - paddleHeight;
-            });
-
-            function resetBall() {
-                ballX = canvas.width / 2;
-                ballY = canvas.height / 2;
-                ballSpeedX = -ballSpeedX;
-                ballSpeedY = (Math.random() * 4) - 2;
-            }
-
-            function update() {
-                ballX += ballSpeedX;
-                ballY += ballSpeedY;
-
-                if (ballY - ballRadius < 0 || ballY + ballRadius > canvas.height) ballSpeedY = -ballSpeedY;
-
-                let aiCenter = aiY + paddleHeight / 2;
-                if (aiCenter < ballY - 10) aiY += 4;
-                else if (aiCenter > ballY + 10) aiY -= 4;
-                if (aiY < 0) aiY = 0;
-                if (aiY > canvas.height - paddleHeight) aiY = canvas.height - paddleHeight;
-
-                if (ballX - ballRadius < paddleWidth) {
-                    if (ballY > playerY && ballY < playerY + paddleHeight) {
-                        ballSpeedX = -ballSpeedX;
-                        ballSpeedY = (ballY - (playerY + paddleHeight / 2)) * 0.3;
-                    } else if (ballX - ballRadius < 0) {
-                        aiScore++;
-                        resetBall();
-                    }
-                }
-
-                if (ballX + ballRadius > canvas.width - paddleWidth) {
-                    if (ballY > aiY && ballY < aiY + paddleHeight) {
-                        ballSpeedX = -ballSpeedX;
-                        ballSpeedY = (ballY - (aiY + paddleHeight / 2)) * 0.3;
-                    } else if (ballX + ballRadius > canvas.width) {
-                        playerScore++;
-                        resetBall();
-                    }
-                }
-            }
-
-            function draw() {
-                ctx.fillStyle = '#000';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.strokeStyle = '#fff';
-                ctx.setLineDash([10, 10]);
-                ctx.beginPath();
-                ctx.moveTo(canvas.width / 2, 0);
-                ctx.lineTo(canvas.width / 2, canvas.height);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                ctx.fillStyle = '#fff';
-                ctx.fillRect(0, playerY, paddleWidth, paddleHeight);
-                ctx.fillRect(canvas.width - paddleWidth, aiY, paddleWidth, paddleHeight);
-                ctx.beginPath();
-                ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.font = '32px monospace';
-                ctx.fillText(playerScore, canvas.width / 4, 50);
-                ctx.fillText(aiScore, (canvas.width / 4) * 3, 50);
-            }
-
-            function loop() {
-                update();
-                draw();
-                pongLoopId = requestAnimationFrame(loop);
-            }
-            loop();
+            gameContainer.innerHTML = ''; 
         }
     </script>
 </body>
