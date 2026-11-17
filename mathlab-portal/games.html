@@ -18,7 +18,6 @@
             --accent: #6366f1;
             --accent-hover: #4f46e5;
             --danger: #ef4444;
-            --success: #10b981;
         }
 
         * { box-sizing: border-box; }
@@ -50,288 +49,133 @@
         header h1 { color: var(--text); font-size: 1.4rem; margin: 0; font-weight: 700; letter-spacing: -0.5px;}
         .header-actions { display: flex; gap: 16px; align-items: center; }
 
-        .back-link { 
-            color: var(--text-muted); 
-            text-decoration: none; 
-            font-size: 0.9rem; 
-            font-weight: 500;
-            transition: color 0.2s;
-        }
+        .back-link { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
         .back-link:hover { color: var(--text); }
 
-        /* User & Login Section */
         .login-section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            margin-top: 32px;
-            padding: 24px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+            margin-top: 32px; padding: 24px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
         .login-section h3 { margin-top: 0; margin-bottom: 16px; font-size: 1.1rem; color: var(--text); font-weight: 600;}
         
-        .login-input-group {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            max-width: 450px;
-            margin: 0 auto;
-        }
-
+        .login-input-group { display: flex; justify-content: center; gap: 12px; max-width: 450px; margin: 0 auto; }
         .login-input-group input {
-            flex: 1;
-            padding: 12px 16px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 8px;
-            outline: none;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            transition: border-color 0.2s;
+            flex: 1; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border);
+            color: var(--text); border-radius: 8px; outline: none; font-size: 1rem; font-family: 'Inter', sans-serif; transition: border-color 0.2s;
         }
-
         .login-input-group input:focus { border-color: var(--accent); }
-
         .login-input-group button {
-            padding: 12px 24px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            transition: background 0.2s;
+            padding: 12px 24px; background: var(--accent); color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; transition: background 0.2s;
         }
         .login-input-group button:hover { background: var(--accent-hover); }
 
-        /* Leaderboard */
         .leaderboard-section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            margin-top: 24px;
-            padding: 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+            margin-top: 24px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
-        .leaderboard-section h2 {
-            font-size: 1.2rem;
-            margin-top: 0;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-        .leaderboard-table th, .leaderboard-table td {
-            padding: 14px 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
+        .leaderboard-section h2 { font-size: 1.2rem; margin-top: 0; color: var(--text); display: flex; align-items: center; gap: 8px; }
+        .leaderboard-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .leaderboard-table th, .leaderboard-table td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border); }
         .leaderboard-table th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px;}
         .leaderboard-table tr:last-child td { border-bottom: none; }
 
-        /* Game Grid */
-        .game-grid {
-            margin: 32px 0 60px 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-        }
-
+        .game-grid { margin: 32px 0 60px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
         .game-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+            overflow: hidden; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer; display: flex; flex-direction: column;
         }
-
-        .game-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--accent);
-            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.15);
-        }
+        .game-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 12px 24px rgba(99, 102, 241, 0.15); }
 
         .game-thumb {
-            height: 160px;
-            background: #0a0c12;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+            height: 160px; background: #0a0c12; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
         }
-        
         .game-thumb::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            opacity: 0.4;
-            transition: opacity 0.3s;
+            content: ''; position: absolute; inset: 0; background-size: cover; background-position: center;
+            opacity: 0.4; transition: opacity 0.3s;
         }
-        
         .game-card:hover .game-thumb::before { opacity: 0.6; }
-
-        /* Game Thumbnail Backgrounds */
+        
+        /* Game Thumbnails */
         .thumb-paperio::before { background-image: url('https://images.crazygames.com/games/paper-io-2/cover-1591356032366.png'); }
         .thumb-run3::before { background-image: url('https://play-lh.googleusercontent.com/1b1QjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjW=w526-h296'); background-color: #111; }
-        .thumb-2048::before { background-image: url('https://play-lh.googleusercontent.com/zP52jW1tE9bHqY3oQx5X6Y7Z8w9A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q=w526-h296'); background-color: #faf8ef; }
-        .thumb-slope::before { background-image: url('https://play-lh.googleusercontent.com/5X6Y7Z8w9A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z=w526-h296'); background-color: #111; }
-        
-        .game-card h3 {
-            padding: 20px;
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-align: center;
-            border-top: 1px solid var(--border);
-        }
+        .thumb-gd::before { background-image: url('https://play-lh.googleusercontent.com/7QWXj6b8W8_7Pq3sQ4rS2Q=w526-h296'); background-color: #ff9800; }
+        .thumb-snake::before { background-color: #4caf50; }
+        .thumb-flappy::before { background-color: #03a9f4; }
 
-        /* Admin & Game Modals */
+        .game-card h3 { padding: 20px; margin: 0; font-size: 1.1rem; font-weight: 600; text-align: center; border-top: 1px solid var(--border); }
+
         .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(11, 15, 25, 0.9);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(8px);
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(11, 15, 25, 0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(8px);
         }
-
         .modal-content {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 32px;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 700px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            background: var(--surface); border: 1px solid var(--border); padding: 32px;
+            border-radius: 16px; width: 100%; max-width: 700px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-
         .modal-content h2 { margin-top: 0; margin-bottom: 24px; font-size: 1.4rem; text-align: center; color: var(--text);}
-        
         .modal-content input {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 16px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 8px;
-            outline: none;
-            font-family: 'Inter', sans-serif;
+            width: 100%; padding: 14px; margin-bottom: 16px; background: var(--bg);
+            border: 1px solid var(--border); color: var(--text); border-radius: 8px; outline: none; font-family: 'Inter', sans-serif;
         }
-
         .btn-primary {
-            width: 100%;
-            padding: 14px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            transition: background 0.2s;
+            width: 100%; padding: 14px; background: var(--accent); color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; transition: background 0.2s;
         }
         .btn-primary:hover { background: var(--accent-hover); }
-
         .btn-secondary {
-            width: 100%;
-            padding: 14px;
-            background: transparent;
-            color: var(--text-muted);
-            border: none;
-            cursor: pointer;
-            margin-top: 12px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 500;
+            width: 100%; padding: 14px; background: transparent; color: var(--text-muted); border: none;
+            cursor: pointer; margin-top: 12px; font-family: 'Inter', sans-serif; font-weight: 500;
         }
         .btn-secondary:hover { color: var(--text); }
 
-        /* Fullscreen Game Player */
+        /* Game Player Modal */
         #game-modal { background: #000; flex-direction: column; }
         #game-modal iframe { width: 100%; height: 100%; border: none; display: block; }
+        
+        /* Local Game Canvas */
+        #local-game-canvas {
+            background: #111;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
 
         .close-game-btn {
-            position: absolute;
-            top: 24px; right: 24px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            z-index: 2001;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-            transition: transform 0.2s;
+            position: absolute; top: 24px; right: 24px; background: var(--danger); color: white; border: none;
+            padding: 12px 24px; border-radius: 8px; cursor: pointer; z-index: 2001; font-weight: 600; font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); transition: transform 0.2s;
         }
         .close-game-btn:hover { transform: scale(1.05); }
 
-        /* Live Event Banner */
         #live-event-banner {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            background: var(--danger);
-            color: white;
-            text-align: center;
-            padding: 14px;
-            font-weight: 700;
-            font-size: 1.2rem;
-            z-index: 3000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            animation: slideDown 0.3s ease;
+            display: none; position: fixed; top: 0; left: 0; right: 0; background: var(--danger); color: white;
+            text-align: center; padding: 14px; font-weight: 700; font-size: 1.2rem; z-index: 3000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5); animation: slideDown 0.3s ease;
         }
+        @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
 
-        @keyframes slideDown {
-            from { transform: translateY(-100%); }
-            to { transform: translateY(0); }
-        }
-
-        /* Admin User List Table */
         .user-table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.9rem; }
         .user-table th, .user-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
         .user-table th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.8rem;}
 
-        /* Credits Button & Modal */
+        .bottom-left-container { position: fixed; bottom: 24px; left: 24px; display: flex; flex-direction: column; gap: 12px; z-index: 500; }
+        #admin-trigger-btn {
+            background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);
+            padding: 6px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; font-family: 'Inter', sans-serif;
+            cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); opacity: 0.5;
+        }
+        #admin-trigger-btn:hover { opacity: 1; color: var(--text); border-color: var(--accent); }
         #credits-btn {
-            position: fixed;
-            bottom: 24px;
-            left: 24px;
-            background: var(--surface);
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-            padding: 10px 16px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            z-index: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
+            background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);
+            padding: 10px 16px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; font-family: 'Inter', sans-serif;
+            cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         #credits-btn:hover { color: var(--text); border-color: var(--accent); transform: translateY(-2px); }
-        
         #credits-modal .modal-content { max-width: 400px; text-align: center; }
         .heart { color: #ef4444; font-size: 1.2rem; }
     </style>
@@ -339,25 +183,36 @@
 <body>
     <div id="live-event-banner"></div>
 
-    <!-- Credits Button -->
-    <button id="credits-btn" onclick="document.getElementById('credits-modal').style.display='flex'">
-        Made with <span class="heart">♥</span> by freddo
-    </button>
+    <div class="bottom-left-container">
+        <button id="admin-trigger-btn" onclick="document.getElementById('admin-login-modal').style.display='flex'">
+            🔒 Admin
+        </button>
+        <button id="credits-btn" onclick="document.getElementById('credits-modal').style.display='flex'">
+            Made with <span class="heart">♥</span> by freddo
+        </button>
+    </div>
 
-    <!-- Credits Modal -->
+    <div id="admin-login-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <h2>Admin Authentication</h2>
+            <input type="password" id="admin-pass-input" placeholder="Enter Admin Password..." onkeypress="if(event.key === 'Enter') submitAdminPass()">
+            <button class="btn-primary" onclick="submitAdminPass()">Login</button>
+            <button class="btn-secondary" onclick="closeModal('admin-login-modal')">Cancel</button>
+        </div>
+    </div>
+
     <div id="credits-modal" class="modal">
         <div class="modal-content">
             <h2>Credits</h2>
             <p style="color: var(--text-muted); margin-bottom: 24px;">This portal was designed and built for maximum learning efficiency.</p>
             <p style="font-size: 1.2rem; font-weight: 600;">Made with <span class="heart">♥</span> by freddo</p>
-            <button class="btn-primary" onclick="document.getElementById('credits-modal').style.display='none'" style="margin-top: 32px;">Awesome!</button>
+            <button class="btn-primary" onclick="closeModal('credits-modal')" style="margin-top: 32px;">Awesome!</button>
         </div>
     </div>
 
-    <!-- Admin Modal -->
     <div id="admin-modal" class="modal">
         <div class="modal-content">
-            <h2>Admin Panel</h2>
+            <h2>Admin Control Panel</h2>
             
             <div style="margin-bottom: 24px; display: flex; gap: 12px;">
                 <input type="text" id="event-input" placeholder="Type live event broadcast..." style="margin-bottom:0;">
@@ -366,7 +221,7 @@
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="font-size: 1rem; margin: 0; color: var(--text-muted);">Registered Users</h3>
+                <h3 style="font-size: 1rem; margin: 0; color: var(--text-muted);">Global Users</h3>
                 <button class="btn-secondary" style="width: auto; margin: 0; padding: 6px 12px; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 6px;" onclick="resetStats()">Reset Stats</button>
             </div>
             
@@ -385,10 +240,9 @@
         </div>
     </div>
 
-    <!-- Fullscreen Game Player Modal -->
     <div id="game-modal" class="modal">
         <button class="close-game-btn" onclick="closeGame()">✖ Close Game</button>
-        <div id="game-container" style="width:100%; height:100%;"></div>
+        <div id="game-container" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div>
     </div>
 
     <header>
@@ -399,7 +253,6 @@
     </header>
 
     <main>
-        <!-- Set Username / Admin Login -->
         <div class="login-section">
             <h3 id="login-title">Enter a username to save your stats</h3>
             <div class="login-input-group">
@@ -408,7 +261,6 @@
             </div>
         </div>
 
-        <!-- Leaderboard -->
         <div class="leaderboard-section">
             <h2>🏆 Global Leaderboard</h2>
             <table class="leaderboard-table">
@@ -425,246 +277,388 @@
             </table>
         </div>
 
-        <!-- Games Grid -->
         <div class="game-grid">
-            <div class="game-card" onclick="loadGame('paperio')">
-                <div class="game-thumb thumb-paperio"></div>
-                <h3>Paper.io 2</h3>
-            </div>
-
-            <div class="game-card" onclick="loadGame('run3')">
-                <div class="game-thumb thumb-run3"><span style="position:relative; z-index:1; color:white; font-weight:bold; font-size:1.5rem;">Run 3</span></div>
-                <h3>Run 3</h3>
-            </div>
-
-            <div class="game-card" onclick="loadGame('2048')">
-                <div class="game-thumb thumb-2048"><span style="position:relative; z-index:1; color:#776e65; font-weight:bold; font-size:1.5rem;">2048</span></div>
-                <h3>2048</h3>
-            </div>
-
-            <div class="game-card" onclick="loadGame('slope')">
-                <div class="game-thumb thumb-slope"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">Slope</span></div>
-                <h3>Slope</h3>
-            </div>
-
-            <div class="game-card" onclick="loadGame('retrobowl')">
-                <div class="game-thumb" style="background: #2a3449;"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">Retro Bowl</span></div>
-                <h3>Retro Bowl</h3>
-            </div>
-
-            <div class="game-card" onclick="loadGame('fifa97')">
-                <div class="game-thumb" style="background: #111;"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">FIFA 97</span></div>
-                <h3>FIFA 97</h3>
-            </div>
+            <div class="game-card" onclick="loadGame('paperio')"><div class="game-thumb thumb-paperio"></div><h3>Paper.io 2</h3></div>
+            <div class="game-card" onclick="loadGame('run3')"><div class="game-thumb thumb-run3"><span style="position:relative; z-index:1; color:white; font-weight:bold; font-size:1.5rem;">Run 3</span></div><h3>Run 3</h3></div>
+            <div class="game-card" onclick="loadGame('fifa97')"><div class="game-thumb" style="background: #10b981;"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">FIFA 97</span></div><h3>FIFA 97</h3></div>
+            
+            <!-- Local Games (No Iframe) -->
+            <div class="game-card" onclick="loadGame('gd')"><div class="game-thumb thumb-gd"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">Geo Dash (Lite)</span></div><h3>Geo Dash (Lite)</h3></div>
+            <div class="game-card" onclick="loadGame('snake')"><div class="game-thumb thumb-snake"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">Snake</span></div><h3>Snake</h3></div>
+            <div class="game-card" onclick="loadGame('flappy')"><div class="game-thumb thumb-flappy"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">Flappy Bird</span></div><h3>Flappy Bird</h3></div>
         </div>
     </main>
 
-    <script>
-        // ==========================================
-        // USER & ADMIN LOGIN SYSTEM
-        // ==========================================
-        function handleLogin() {
-            const input = document.getElementById('username-input').value.trim();
-            if (!input) return;
+    <!-- FIREBASE SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-            // Check for admin password
-            if (input === 'pennyml') {
-                document.getElementById('username-input').value = '';
-                openAdminPanel();
-                return;
-            }
+        // PASTE YOUR FIREBASE CONFIG HERE
+const firebaseConfig = {
+  apiKey: "AIzaSyBFfo2Xwv4dwX2IS5-khLWRQWOrtHan6ds",
+  authDomain: "mathlab-portal.firebaseapp.com",
+  databaseURL: "https://mathlab-portal-default-rtdb.firebaseio.com",
+  projectId: "mathlab-portal",
+  storageBucket: "mathlab-portal.firebasestorage.app",
+  messagingSenderId: "210707436486",
+  appId: "1:210707436486:web:ca4b9f04ba5aa0724658c7",
+  measurementId: "G-Y87C0YPRZL"
+};
 
-            // Save as normal user
-            localStorage.setItem('myUsername', input);
-            
-            let users = JSON.parse(localStorage.getItem('portal_users') || '{}');
-            if (!users[input]) users[input] = { playtime: 0, lastSeen: '' };
-            
-            users[input].lastSeen = new Date().toLocaleTimeString();
-            localStorage.setItem('portal_users', JSON.stringify(users));
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-            // Update UI
-            document.getElementById('login-title').textContent = `Logged in as: ${input}`;
-            document.getElementById('username-input').value = '';
-            document.getElementById('username-input').placeholder = "Change username...";
-            
-            updateLeaderboard();
-        }
+        window.db = db; window.ref = ref; window.set = set; window.onValue = onValue; window.remove = remove;
 
-        // ==========================================
-        // ADMIN SYSTEM
-        // ==========================================
-        function openAdminPanel() {
-            updateAdminList();
-            document.getElementById('admin-modal').style.display = 'flex';
-        }
-
-        function updateAdminList() {
-            const users = JSON.parse(localStorage.getItem('portal_users') || '{}');
-            const tbody = document.getElementById('admin-user-list');
-            tbody.innerHTML = '';
-            
-            if (Object.keys(users).length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3">No users found.</td></tr>';
-            } else {
-                const sorted = Object.entries(users).sort((a, b) => b[1].playtime - a[1].playtime);
-                for (const [name, data] of sorted) {
-                    const mins = Math.floor(data.playtime / 60);
-                    tbody.innerHTML += `<tr>
-                        <td>${name}</td>
-                        <td>${mins}m</td>
-                        <td>${data.lastSeen}</td>
-                    </tr>`;
-                }
-            }
-        }
-
-        function resetStats() {
-            if(confirm("Are you sure you want to wipe all user stats?")) {
-                localStorage.removeItem('portal_users');
-                updateAdminList();
-                updateLeaderboard();
-            }
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        // ==========================================
-        // LIVE EVENT SYSTEM
-        // ==========================================
         const banner = document.getElementById('live-event-banner');
+        const eventRef = ref(db, 'liveEvent');
 
-        function checkActiveEvent() {
-            const activeEvent = localStorage.getItem('liveEvent');
-            if (activeEvent) {
-                banner.textContent = activeEvent;
-                banner.style.display = 'block';
-            } else {
-                banner.style.display = 'none';
-            }
-        }
-        checkActiveEvent();
-
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'liveEvent') checkActiveEvent();
+        onValue(eventRef, (snapshot) => {
+            const activeEvent = snapshot.val();
+            if (activeEvent) { banner.textContent = activeEvent; banner.style.display = 'block'; } 
+            else { banner.style.display = 'none'; }
         });
 
-        function sendEvent() {
+        window.sendEvent = function() {
             const msg = document.getElementById('event-input').value;
-            if (msg.trim() !== '') {
-                localStorage.setItem('liveEvent', msg);
-                banner.textContent = msg;
-                banner.style.display = 'block';
-                document.getElementById('event-input').value = '';
-            }
-        }
+            if (msg.trim() !== '') { set(eventRef, msg); document.getElementById('event-input').value = ''; }
+        };
+        window.clearEvent = function() { remove(eventRef); document.getElementById('event-input').value = ''; };
 
-        function clearEvent() {
-            localStorage.removeItem('liveEvent');
-            banner.style.display = 'none';
-            document.getElementById('event-input').value = '';
-        }
+        let currentUsers = {};
+        const usersRef = ref(db, 'users');
 
-        // ==========================================
-        // LEADERBOARD & PLAYTIME TRACKING
-        // ==========================================
-        function updateLeaderboard() {
-            const users = JSON.parse(localStorage.getItem('portal_users') || '{}');
+        onValue(usersRef, (snapshot) => {
+            currentUsers = snapshot.val() || {};
+            updatePublicLeaderboard();
+            updateAdminList();
+        });
+
+        function updatePublicLeaderboard() {
             const tbody = document.getElementById('public-leaderboard');
             tbody.innerHTML = '';
+            const sorted = Object.entries(currentUsers).filter(([name, data]) => data.playtime > 0).sort((a, b) => b[1].playtime - a[1].playtime).slice(0, 10);
 
-            const sorted = Object.entries(users)
-                .filter(([name, data]) => data.playtime > 0)
-                .sort((a, b) => b[1].playtime - a[1].playtime)
-                .slice(0, 10);
-
-            if (sorted.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3">No playtime recorded yet. Start playing!</td></tr>';
-                return;
-            }
+            if (sorted.length === 0) { tbody.innerHTML = '<tr><td colspan="3">No playtime recorded yet. Start playing!</td></tr>'; return; }
 
             sorted.forEach(([name, data], index) => {
                 const mins = Math.floor(data.playtime / 60);
                 const secs = data.playtime % 60;
                 const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
-                
                 let rank = index + 1;
-                if (rank === 1) rank = '🥇';
-                else if (rank === 2) rank = '🥈';
-                else if (rank === 3) rank = '🥉';
-
-                tbody.innerHTML += `<tr>
-                    <td>${rank}</td>
-                    <td>${name}</td>
-                    <td>${timeStr}</td>
-                </tr>`;
+                if (rank === 1) rank = '🥇'; else if (rank === 2) rank = '🥈'; else if (rank === 3) rank = '🥉';
+                tbody.innerHTML += `<tr><td>${rank}</td><td>${name}</td><td>${timeStr}</td></tr>`;
             });
         }
 
         let activePlaySession = null;
         let playSessionStart = null;
 
-        function startPlaySession() {
+        window.handleLogin = function() {
+            const input = document.getElementById('username-input').value.trim();
+            if (!input) return;
+            localStorage.setItem('myUsername', input);
+            
+            const userRef = ref(db, 'users/' + input);
+            const userData = currentUsers[input] || { playtime: 0 };
+            userData.lastSeen = new Date().toLocaleTimeString();
+            set(userRef, userData);
+
+            document.getElementById('login-title').textContent = `Logged in as: ${input}`;
+            document.getElementById('username-input').value = '';
+            document.getElementById('username-input').placeholder = "Change username...";
+        };
+
+        window.startPlaySession = function() {
             const currentUser = localStorage.getItem('myUsername');
             if (!currentUser) return;
-
             playSessionStart = Date.now();
             activePlaySession = currentUser;
+        };
+
+        window.endPlaySession = function() {
+            if (!activePlaySession || !playSessionStart) return;
+            const secondsPlayed = Math.floor((Date.now() - playSessionStart) / 1000);
+            if (secondsPlayed > 0) {
+                const userRef = ref(db, 'users/' + activePlaySession);
+                const userData = currentUsers[activePlaySession] || { playtime: 0 };
+                userData.playtime += secondsPlayed;
+                set(userRef, userData);
+            }
+            activePlaySession = null; playSessionStart = null;
+        };
+
+        window.submitAdminPass = function() {
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === 'pennyml') {
+                document.getElementById('admin-pass-input').value = '';
+                closeModal('admin-login-modal');
+                document.getElementById('admin-modal').style.display = 'flex';
+            } else { alert("Incorrect password."); document.getElementById('admin-pass-input').value = ''; }
+        };
+
+        function updateAdminList() {
+            const tbody = document.getElementById('admin-user-list');
+            tbody.innerHTML = '';
+            if (Object.keys(currentUsers).length === 0) { tbody.innerHTML = '<tr><td colspan="3">No users found.</td></tr>'; } 
+            else {
+                const sorted = Object.entries(currentUsers).sort((a, b) => b[1].playtime - a[1].playtime);
+                for (const [name, data] of sorted) {
+                    const mins = Math.floor(data.playtime / 60);
+                    tbody.innerHTML += `<tr><td>${name}</td><td>${mins}m</td><td>${data.lastSeen}</td></tr>`;
+                }
+            }
         }
 
-        function endPlaySession() {
-            if (!activePlaySession || !playSessionStart) return;
+        window.resetStats = function() {
+            if(confirm("Are you sure you want to wipe all user stats?")) { remove(ref(db, 'users')); }
+        };
+    </script>
 
-            const secondsPlayed = Math.floor((Date.now() - playSessionStart) / 1000);
+    <!-- LOCAL GAME LOGIC & LOADER -->
+    <script>
+        window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; };
+        const gameContainer = document.getElementById('game-container');
+        let animationFrameId = null;
+
+        window.loadGame = function(game) {
+            if(window.startPlaySession) window.startPlaySession();
+            document.getElementById('game-modal').style.display = 'flex';
+            gameContainer.innerHTML = ''; 
             
-            if (secondsPlayed > 0) {
-                let users = JSON.parse(localStorage.getItem('portal_users') || '{}');
-                if (users[activePlaySession]) {
-                    users[activePlaySession].playtime += secondsPlayed;
-                    localStorage.setItem('portal_users', JSON.stringify(users));
+            // Cancel any running local games
+            if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; }
+
+            if (game === 'paperio' || game === 'run3' || game === 'fifa97') {
+                const iframe = document.createElement('iframe');
+                iframe.allow = 'fullscreen; autoplay; gamepad; pointer-lock';
+                if (game === 'paperio') iframe.src = 'https://paper-io.com/embed/'; 
+                else if (game === 'run3') iframe.src = 'https://run3-unblocked.org/'; 
+                else if (game === 'fifa97') iframe.src = 'https://getretrogames.com/game/embed/fifa-97-europe-en-fr-de-es-it-sv-snes';
+                gameContainer.appendChild(iframe);
+            } 
+            else {
+                // Local Games (Unblockable)
+                const canvas = document.createElement('canvas');
+                canvas.width = 800;
+                canvas.height = 600;
+                canvas.style.background = '#0b0f19';
+                gameContainer.appendChild(canvas);
+                const ctx = canvas.getContext('2d');
+
+                if (game === 'gd') startGeometryDash(ctx, canvas);
+                else if (game === 'snake') startSnake(ctx, canvas);
+                else if (game === 'flappy') startFlappy(ctx, canvas);
+            }
+        }
+
+        window.closeGame = function() {
+            if(window.endPlaySession) window.endPlaySession();
+            document.getElementById('game-modal').style.display = 'none';
+            gameContainer.innerHTML = ''; 
+            if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; }
+        }
+
+        // ==========================================
+        // GAME 1: GEOMETRY DASH LITE
+        // ==========================================
+        function startGeometryDash(ctx, canvas) {
+            let player = { x: 100, y: 400, size: 30, vy: 0, gravity: 0.6, jumpForce: -11, isGrounded: false };
+            let obstacles = [];
+            let frameCount = 0;
+            let speed = 6;
+            let score = 0;
+            let gameOver = false;
+
+            function jump() { if (player.isGrounded) { player.vy = player.jumpForce; player.isGrounded = false; } }
+            
+            canvas.addEventListener('mousedown', jump);
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); }, { passive: false });
+            window.addEventListener('keydown', (e) => { if (e.code === 'Space' || e.code === 'ArrowUp') jump(); });
+
+            function loop() {
+                if (gameOver) {
+                    ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle = '#fff'; ctx.font = '40px Inter'; ctx.textAlign = 'center';
+                    ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2);
+                    ctx.font = '20px Inter'; ctx.fillText('Click Close to retry', canvas.width/2, canvas.height/2 + 40);
+                    return;
+                }
+
+                frameCount++;
+                if (frameCount % 90 === 0) { // Spawn obstacles
+                    let height = Math.random() * 40 + 20;
+                    obstacles.push({ x: canvas.width, y: 450 - height, w: 30, h: height, passed: false });
+                }
+
+                player.vy += player.gravity;
+                player.y += player.vy;
+
+                if (player.y >= 450 - player.size) { player.y = 450 - player.size; player.vy = 0; player.isGrounded = true; }
+
+                ctx.fillStyle = '#0b0f19'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#2a3449'; ctx.fillRect(0, 450, canvas.width, canvas.height - 450); // Ground
+
+                ctx.fillStyle = '#6366f1';
+                ctx.fillRect(player.x, player.y, player.size, player.size); // Player square
+
+                for (let i = obstacles.length - 1; i >= 0; i--) {
+                    let ob = obstacles[i];
+                    ob.x -= speed;
+                    
+                    ctx.fillStyle = '#ef4444';
+                    ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
+
+                    // Collision
+                    if (player.x < ob.x + ob.w && player.x + player.size > ob.x && player.y + player.size > ob.y) {
+                        gameOver = true;
+                    }
+
+                    if (ob.x + ob.w < player.x && !ob.passed) { ob.passed = true; score += 10; }
+                    if (ob.x + ob.w < 0) obstacles.splice(i, 1);
+                }
+
+                ctx.fillStyle = '#fff'; ctx.font = '24px Inter'; ctx.textAlign = 'left';
+                ctx.fillText(`Score: ${score}`, 20, 40);
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ==========================================
+        // GAME 2: SNAKE
+        // ==========================================
+        function startSnake(ctx, canvas) {
+            const gridSize = 20;
+            const tileCount = canvas.width / gridSize;
+            let snake = [{x: 10, y: 10}];
+            let food = {x: 15, y: 15};
+            let dx = 0, dy = 0;
+            let score = 0;
+            let gameOver = false;
+            let gameLoopInterval = null;
+
+            window.addEventListener('keydown', e => {
+                if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -1; }
+                if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = 1; }
+                if (e.key === 'ArrowLeft' && dx === 0) { dx = -1; dy = 0; }
+                if (e.key === 'ArrowRight' && dx === 0) { dx = 1; dy = 0; }
+            });
+
+            function update() {
+                if (gameOver) return;
+                if (dx === 0 && dy === 0) { draw(); return; }
+
+                let head = {x: snake[0].x + dx, y: snake[0].y + dy};
+
+                if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount || snake.some(s => s.x === head.x && s.y === head.y)) {
+                    gameOver = true;
+                }
+
+                if (!gameOver) {
+                    snake.unshift(head);
+                    if (head.x === food.x && head.y === food.y) {
+                        score += 10;
+                        food = { x: Math.floor(Math.random() * tileCount), y: Math.floor(Math.random() * tileCount) };
+                    } else {
+                        snake.pop();
+                    }
+                }
+                draw();
+            }
+
+            function draw() {
+                ctx.fillStyle = '#0b0f19'; ctx.fillRect(0,0,canvas.width,canvas.height);
+                
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize-2, gridSize-2);
+
+                ctx.fillStyle = '#6366f1';
+                snake.forEach(s => ctx.fillRect(s.x * gridSize, s.y * gridSize, gridSize-2, gridSize-2));
+
+                ctx.fillStyle = '#fff'; ctx.font = '24px Inter'; ctx.textAlign = 'left';
+                ctx.fillText(`Score: ${score}`, 20, 40);
+
+                if (gameOver) {
+                    ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle = '#fff'; ctx.font = '40px Inter'; ctx.textAlign = 'center';
+                    ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2);
                 }
             }
 
-            activePlaySession = null;
-            playSessionStart = null;
-            updateLeaderboard();
+            gameLoopInterval = setInterval(update, 100); // Snake game loop
+            // Clear interval on close (handled by closeGame removing the canvas)
         }
 
         // ==========================================
-        // GAME LOADER
+        // GAME 3: FLAPPY BIRD
         // ==========================================
-        const gameContainer = document.getElementById('game-container');
+        function startFlappy(ctx, canvas) {
+            let bird = { x: 100, y: canvas.height/2, vy: 0, gravity: 0.4, jump: -7 };
+            let pipes = [];
+            let frameCount = 0;
+            let score = 0;
+            let gameOver = false;
 
-        function loadGame(game) {
-            startPlaySession();
+            function jump() { if (!gameOver) bird.vy = bird.jump; }
+            canvas.addEventListener('mousedown', jump);
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); }, { passive: false });
+            window.addEventListener('keydown', (e) => { if (e.code === 'Space' || e.code === 'ArrowUp') jump(); });
 
-            document.getElementById('game-modal').style.display = 'flex';
-            gameContainer.innerHTML = ''; 
+            function loop() {
+                if (gameOver) {
+                    ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle = '#fff'; ctx.font = '40px Inter'; ctx.textAlign = 'center';
+                    ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2);
+                    return;
+                }
 
-            const iframe = document.createElement('iframe');
-            iframe.allow = 'fullscreen; autoplay; gamepad; pointer-lock';
+                frameCount++;
+                if (frameCount % 100 === 0) {
+                    let gap = 150;
+                    let topHeight = Math.random() * (canvas.height - gap - 100) + 50;
+                    pipes.push({ x: canvas.width, y: 0, w: 50, h: topHeight, passed: false });
+                    pipes.push({ x: canvas.width, y: topHeight + gap, w: 50, h: canvas.height - (topHeight + gap), passed: false });
+                }
 
-            if (game === 'paperio') iframe.src = 'https://paper-io.com/embed/'; 
-            else if (game === 'run3') iframe.src = 'https://run3-unblocked.org/'; 
-            else if (game === 'fifa97') iframe.src = 'https://getretrogames.com/game/embed/fifa-97-europe-en-fr-de-es-it-sv-snes';
-            else if (game === '2048') iframe.src = 'https://play2048.co/';
-            else if (game === 'slope') iframe.src = 'https://slope-game.github.io/';
-            else if (game === 'retrobowl') iframe.src = 'https://retro-bowl.me/';
+                bird.vy += bird.gravity;
+                bird.y += bird.vy;
 
-            gameContainer.appendChild(iframe);
+                if (bird.y > canvas.height || bird.y < 0) gameOver = true;
+
+                ctx.fillStyle = '#0b0f19'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#fbbf24';
+                ctx.beginPath();
+                ctx.arc(bird.x, bird.y, 15, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let i = pipes.length - 1; i >= 0; i--) {
+                    let p = pipes[i];
+                    p.x -= 4;
+
+                    ctx.fillStyle = '#22c55e';
+                    ctx.fillRect(p.x, p.y, p.w, p.h);
+
+                    if (bird.x + 15 > p.x && bird.x - 15 < p.x + p.w && bird.y + 15 > p.y && bird.y - 15 < p.y + p.h) {
+                        gameOver = true;
+                    }
+
+                    if (p.x + p.w < bird.x && !p.passed && p.y === 0) { p.passed = true; score += 10; }
+                    if (p.x + p.w < 0) pipes.splice(i, 1);
+                }
+
+                ctx.fillStyle = '#fff'; ctx.font = '24px Inter'; ctx.textAlign = 'left';
+                ctx.fillText(`Score: ${score}`, 20, 40);
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
         }
 
-        function closeGame() {
-            endPlaySession();
-            document.getElementById('game-modal').style.display = 'none';
-            gameContainer.innerHTML = ''; 
-        }
-
-        // Initial Load setup
-        updateLeaderboard();
-        
+        // Check if user is already logged in from previous session
         const savedName = localStorage.getItem('myUsername');
         if (savedName) {
             document.getElementById('login-title').textContent = `Logged in as: ${savedName}`;
