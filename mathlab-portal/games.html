@@ -3,31 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathLab Portal</title>
+    <title>Interactive Learning Modules</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         :root {
-            --bg: #0f111a;
-            --surface: #1a1d27;
-            --border: #2a2d3a;
-            --text: #e2e8f0;
+            --bg: #0b0f19;
+            --surface: #151b2b;
+            --surface-hover: #1e2638;
+            --border: #2a3449;
+            --text: #f1f5f9;
             --text-muted: #94a3b8;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
             --danger: #ef4444;
-            --success: #22c55e;
+            --success: #10b981;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             background-color: var(--bg);
             color: var(--text);
+            font-family: 'Inter', -apple-system, sans-serif;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
         }
 
-        main { flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; padding: 0 24px; }
+        main { flex: 1; max-width: 1280px; margin: 0 auto; width: 100%; padding: 0 24px; }
 
         header {
             background: var(--surface);
@@ -35,55 +41,68 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 32px;
+            padding: 20px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        header h1 { color: var(--text); font-size: 1.4rem; margin: 0; }
+        header h1 { color: var(--text); font-size: 1.4rem; margin: 0; font-weight: 700; letter-spacing: -0.5px;}
         .header-actions { display: flex; gap: 16px; align-items: center; }
 
-        .back-link { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
-        .back-link:hover { text-decoration: underline; }
+        .back-link { 
+            color: var(--text-muted); 
+            text-decoration: none; 
+            font-size: 0.9rem; 
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--text); }
 
-        /* Username / Admin Login Section */
+        /* User & Login Section */
         .login-section {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-top: 24px;
-            padding: 20px;
+            border-radius: 16px;
+            margin-top: 32px;
+            padding: 24px;
             text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
-        .login-section h3 { margin-top: 0; margin-bottom: 12px; font-size: 1rem; color: var(--text-muted); font-weight: normal;}
+        .login-section h3 { margin-top: 0; margin-bottom: 16px; font-size: 1.1rem; color: var(--text); font-weight: 600;}
         
         .login-input-group {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            max-width: 400px;
+            gap: 12px;
+            max-width: 450px;
             margin: 0 auto;
         }
 
         .login-input-group input {
             flex: 1;
-            padding: 10px 16px;
+            padding: 12px 16px;
             background: var(--bg);
             border: 1px solid var(--border);
             color: var(--text);
-            border-radius: 6px;
+            border-radius: 8px;
             outline: none;
             font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
         }
 
         .login-input-group input:focus { border-color: var(--accent); }
 
         .login-input-group button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             background: var(--accent);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
             transition: background 0.2s;
         }
         .login-input-group button:hover { background: var(--accent-hover); }
@@ -92,14 +111,15 @@
         .leaderboard-section {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 16px;
             margin-top: 24px;
-            padding: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
         .leaderboard-section h2 {
             font-size: 1.2rem;
             margin-top: 0;
-            color: var(--accent);
+            color: var(--text);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -110,32 +130,36 @@
             font-size: 0.95rem;
         }
         .leaderboard-table th, .leaderboard-table td {
-            padding: 12px;
+            padding: 14px 12px;
             text-align: left;
             border-bottom: 1px solid var(--border);
         }
-        .leaderboard-table th { color: var(--text-muted); font-weight: 600; }
+        .leaderboard-table th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px;}
         .leaderboard-table tr:last-child td { border-bottom: none; }
 
+        /* Game Grid */
         .game-grid {
-            margin: 32px 0;
+            margin: 32px 0 60px 0;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 24px;
         }
 
         .game-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
 
         .game-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
             border-color: var(--accent);
+            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.15);
         }
 
         .game-thumb {
@@ -144,95 +168,120 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-bottom: 1px solid var(--border);
             position: relative;
+            overflow: hidden;
         }
+        
+        .game-thumb::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+        
+        .game-card:hover .game-thumb::before { opacity: 0.6; }
 
-        .game-thumb span { font-weight: bold; font-size: 1.3rem; color: white; }
-
+        /* Game Thumbnail Backgrounds */
+        .thumb-paperio::before { background-image: url('https://images.crazygames.com/games/paper-io-2/cover-1591356032366.png'); }
+        .thumb-run3::before { background-image: url('https://play-lh.googleusercontent.com/1b1QjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjWjW=w526-h296'); background-color: #111; }
+        .thumb-2048::before { background-image: url('https://play-lh.googleusercontent.com/zP52jW1tE9bHqY3oQx5X6Y7Z8w9A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q=w526-h296'); background-color: #faf8ef; }
+        .thumb-slope::before { background-image: url('https://play-lh.googleusercontent.com/5X6Y7Z8w9A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z=w526-h296'); background-color: #111; }
+        
         .game-card h3 {
-            padding: 16px;
+            padding: 20px;
             margin: 0;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             text-align: center;
+            border-top: 1px solid var(--border);
         }
 
-        /* Admin Modal */
+        /* Admin & Game Modals */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
+            background: rgba(11, 15, 25, 0.9);
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
         }
 
         .modal-content {
             background: var(--surface);
             border: 1px solid var(--border);
-            padding: 24px;
-            border-radius: 12px;
+            padding: 32px;
+            border-radius: 16px;
             width: 100%;
             max-width: 700px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        .modal-content h2 { margin-top: 0; margin-bottom: 16px; font-size: 1.2rem; text-align: center;}
+        .modal-content h2 { margin-top: 0; margin-bottom: 24px; font-size: 1.4rem; text-align: center; color: var(--text);}
         
         .modal-content input {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin-bottom: 16px;
             background: var(--bg);
             border: 1px solid var(--border);
             color: var(--text);
-            border-radius: 6px;
+            border-radius: 8px;
             outline: none;
-            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
         .btn-primary {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: var(--accent);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
         }
         .btn-primary:hover { background: var(--accent-hover); }
 
         .btn-secondary {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: transparent;
             color: var(--text-muted);
             border: none;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
         }
         .btn-secondary:hover { color: var(--text); }
 
-        /* Game Player Modal */
+        /* Fullscreen Game Player */
         #game-modal { background: #000; flex-direction: column; }
         #game-modal iframe { width: 100%; height: 100%; border: none; display: block; }
 
         .close-game-btn {
             position: absolute;
-            top: 20px; right: 20px;
+            top: 24px; right: 24px;
             background: var(--danger);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 12px 24px;
+            border-radius: 8px;
             cursor: pointer;
             z-index: 2001;
-            font-weight: bold;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            transition: transform 0.2s;
         }
+        .close-game-btn:hover { transform: scale(1.05); }
 
         /* Live Event Banner */
         #live-event-banner {
@@ -242,8 +291,8 @@
             background: var(--danger);
             color: white;
             text-align: center;
-            padding: 12px;
-            font-weight: bold;
+            padding: 14px;
+            font-weight: 700;
             font-size: 1.2rem;
             z-index: 3000;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
@@ -257,51 +306,82 @@
 
         /* Admin User List Table */
         .user-table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.9rem; }
-        .user-table th, .user-table td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); }
-        .user-table th { color: var(--accent); }
+        .user-table th, .user-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        .user-table th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.8rem;}
 
-        footer {
-            text-align: center;
-            padding: 24px;
-            font-size: 0.9rem;
+        /* Credits Button & Modal */
+        #credits-btn {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            background: var(--surface);
             color: var(--text-muted);
-            border-top: 1px solid var(--border);
-            margin-top: 40px;
-            font-weight: bold;
+            border: 1px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
+        #credits-btn:hover { color: var(--text); border-color: var(--accent); transform: translateY(-2px); }
+        
+        #credits-modal .modal-content { max-width: 400px; text-align: center; }
+        .heart { color: #ef4444; font-size: 1.2rem; }
     </style>
 </head>
 <body>
     <div id="live-event-banner"></div>
+
+    <!-- Credits Button -->
+    <button id="credits-btn" onclick="document.getElementById('credits-modal').style.display='flex'">
+        Made with <span class="heart">♥</span> by freddo
+    </button>
+
+    <!-- Credits Modal -->
+    <div id="credits-modal" class="modal">
+        <div class="modal-content">
+            <h2>Credits</h2>
+            <p style="color: var(--text-muted); margin-bottom: 24px;">This portal was designed and built for maximum learning efficiency.</p>
+            <p style="font-size: 1.2rem; font-weight: 600;">Made with <span class="heart">♥</span> by freddo</p>
+            <button class="btn-primary" onclick="document.getElementById('credits-modal').style.display='none'" style="margin-top: 32px;">Awesome!</button>
+        </div>
+    </div>
 
     <!-- Admin Modal -->
     <div id="admin-modal" class="modal">
         <div class="modal-content">
             <h2>Admin Panel</h2>
             
-            <div style="margin-bottom: 20px; display: flex; gap: 8px;">
-                <input type="text" id="event-input" placeholder="Type live event..." style="margin-bottom:0;">
-                <button class="btn-primary" onclick="sendEvent()" style="width: 80px;">Send</button>
-                <button class="btn-primary" style="width: 80px; background: var(--danger);" onclick="clearEvent()">Clear</button>
+            <div style="margin-bottom: 24px; display: flex; gap: 12px;">
+                <input type="text" id="event-input" placeholder="Type live event broadcast..." style="margin-bottom:0;">
+                <button class="btn-primary" onclick="sendEvent()" style="width: 100px;">Send</button>
+                <button class="btn-primary" style="width: 100px; background: var(--danger);" onclick="clearEvent()">Clear</button>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="font-size: 1rem; margin: 0;">Registered Users</h3>
-                <button class="btn-secondary" style="width: auto; margin: 0; padding: 4px 8px; font-size: 0.8rem;" onclick="resetStats()">Reset Stats</button>
+                <h3 style="font-size: 1rem; margin: 0; color: var(--text-muted);">Registered Users</h3>
+                <button class="btn-secondary" style="width: auto; margin: 0; padding: 6px 12px; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 6px;" onclick="resetStats()">Reset Stats</button>
             </div>
             
             <table class="user-table">
                 <thead>
                     <tr>
                         <th>Username</th>
-                        <th>Total Playtime (Mins)</th>
+                        <th>Playtime (Mins)</th>
                         <th>Last Seen</th>
                     </tr>
                 </thead>
                 <tbody id="admin-user-list"></tbody>
             </table>
 
-            <button class="btn-secondary" onclick="closeModal('admin-modal')" style="margin-top: 20px;">Close Panel</button>
+            <button class="btn-secondary" onclick="closeModal('admin-modal')" style="margin-top: 24px;">Close Panel</button>
         </div>
     </div>
 
@@ -321,7 +401,7 @@
     <main>
         <!-- Set Username / Admin Login -->
         <div class="login-section">
-            <h3 id="login-title">Enter your username to save your stats</h3>
+            <h3 id="login-title">Enter a username to save your stats</h3>
             <div class="login-input-group">
                 <input type="text" id="username-input" placeholder="Username...">
                 <button onclick="handleLogin()">Set User</button>
@@ -330,7 +410,7 @@
 
         <!-- Leaderboard -->
         <div class="leaderboard-section">
-            <h2>🏆 Global Leaderboard (Total Playtime)</h2>
+            <h2>🏆 Global Leaderboard</h2>
             <table class="leaderboard-table">
                 <thead>
                     <tr>
@@ -348,30 +428,36 @@
         <!-- Games Grid -->
         <div class="game-grid">
             <div class="game-card" onclick="loadGame('paperio')">
-                <div class="game-thumb"><span>Paper.io 2</span></div>
+                <div class="game-thumb thumb-paperio"></div>
                 <h3>Paper.io 2</h3>
             </div>
 
             <div class="game-card" onclick="loadGame('run3')">
-                <div class="game-thumb"><span>Run 3</span></div>
+                <div class="game-thumb thumb-run3"><span style="position:relative; z-index:1; color:white; font-weight:bold; font-size:1.5rem;">Run 3</span></div>
                 <h3>Run 3</h3>
             </div>
 
-            <div class="game-card" onclick="loadGame('fifa97')">
-                <div class="game-thumb"><span>FIFA 97</span></div>
-                <h3>FIFA 97</h3>
+            <div class="game-card" onclick="loadGame('2048')">
+                <div class="game-thumb thumb-2048"><span style="position:relative; z-index:1; color:#776e65; font-weight:bold; font-size:1.5rem;">2048</span></div>
+                <h3>2048</h3>
             </div>
 
-            <div class="game-card" onclick="loadGame('fm')">
-                <div class="game-thumb"><span>Football Manager</span></div>
-                <h3>Football Manager</h3>
+            <div class="game-card" onclick="loadGame('slope')">
+                <div class="game-thumb thumb-slope"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">Slope</span></div>
+                <h3>Slope</h3>
+            </div>
+
+            <div class="game-card" onclick="loadGame('retrobowl')">
+                <div class="game-thumb" style="background: #2a3449;"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">Retro Bowl</span></div>
+                <h3>Retro Bowl</h3>
+            </div>
+
+            <div class="game-card" onclick="loadGame('fifa97')">
+                <div class="game-thumb" style="background: #111;"><span style="position:relative; z-index:1; color:#fff; font-weight:bold; font-size:1.5rem;">FIFA 97</span></div>
+                <h3>FIFA 97</h3>
             </div>
         </div>
     </main>
-
-    <footer>
-        Made by Mr Branker and Mr Kenwright!!!
-    </footer>
 
     <script>
         // ==========================================
@@ -381,14 +467,14 @@
             const input = document.getElementById('username-input').value.trim();
             if (!input) return;
 
-            // Check if they entered the admin password
+            // Check for admin password
             if (input === 'pennyml') {
                 document.getElementById('username-input').value = '';
                 openAdminPanel();
                 return;
             }
 
-            // Otherwise, save as a normal username
+            // Save as normal user
             localStorage.setItem('myUsername', input);
             
             let users = JSON.parse(localStorage.getItem('portal_users') || '{}');
@@ -397,7 +483,7 @@
             users[input].lastSeen = new Date().toLocaleTimeString();
             localStorage.setItem('portal_users', JSON.stringify(users));
 
-            // Update UI to show they are logged in
+            // Update UI
             document.getElementById('login-title').textContent = `Logged in as: ${input}`;
             document.getElementById('username-input').value = '';
             document.getElementById('username-input').placeholder = "Change username...";
@@ -557,32 +643,21 @@
             document.getElementById('game-modal').style.display = 'flex';
             gameContainer.innerHTML = ''; 
 
-            if (game === 'paperio') {
-                const iframe = document.createElement('iframe');
-                iframe.src = 'https://paper-io.com/embed/'; 
-                iframe.allow = 'fullscreen; autoplay; gamepad; pointer-lock';
-                gameContainer.appendChild(iframe);
-            } 
-            else if (game === 'run3') {
-                const iframe = document.createElement('iframe');
-                iframe.src = 'https://run3-unblocked.org/'; 
-                gameContainer.appendChild(iframe);
-            }
-            else if (game === 'fifa97') {
-                const iframe = document.createElement('iframe');
-                iframe.src = 'https://getretrogames.com/game/embed/fifa-97-europe-en-fr-de-es-it-sv-snes';
-                gameContainer.appendChild(iframe);
-            }
-            else if (game === 'fm') {
-                const iframe = document.createElement('iframe');
-                iframe.src = 'https://douknowball.com/club-manager'; 
-                gameContainer.appendChild(iframe);
-            }
+            const iframe = document.createElement('iframe');
+            iframe.allow = 'fullscreen; autoplay; gamepad; pointer-lock';
+
+            if (game === 'paperio') iframe.src = 'https://paper-io.com/embed/'; 
+            else if (game === 'run3') iframe.src = 'https://run3-unblocked.org/'; 
+            else if (game === 'fifa97') iframe.src = 'https://getretrogames.com/game/embed/fifa-97-europe-en-fr-de-es-it-sv-snes';
+            else if (game === '2048') iframe.src = 'https://play2048.co/';
+            else if (game === 'slope') iframe.src = 'https://slope-game.github.io/';
+            else if (game === 'retrobowl') iframe.src = 'https://retro-bowl.me/';
+
+            gameContainer.appendChild(iframe);
         }
 
         function closeGame() {
             endPlaySession();
-
             document.getElementById('game-modal').style.display = 'none';
             gameContainer.innerHTML = ''; 
         }
@@ -590,7 +665,6 @@
         // Initial Load setup
         updateLeaderboard();
         
-        // Check if user already has a username saved
         const savedName = localStorage.getItem('myUsername');
         if (savedName) {
             document.getElementById('login-title').textContent = `Logged in as: ${savedName}`;
